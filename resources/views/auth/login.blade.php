@@ -2,11 +2,11 @@
 
 @section('content')
 <div class="container">
-    <!--<div class="signup-icon">
+    <div class="signup-icon">
         <i class="fa fa-user-circle"></i>
-        <span class="signup"><a href="">Don't have account? Signup</a></span>
-    </div>-->
-    <div class="form-login">
+        <span class="signup"><a href="{{ route('register') }}">Don't have account? Signup</a></span>
+    </div>
+    <div class="form-container">
         <img src="{{ asset('images/bcps.png') }}" height="80" width="80" alt="Logo">
         <span class="title">{{ __('Login') }}</span>
         <form method="POST" action="{{ route('login') }}">

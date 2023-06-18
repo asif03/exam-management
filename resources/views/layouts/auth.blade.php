@@ -44,18 +44,17 @@
     }
 
     .container {
-      background: linear-gradient(#5f76e8, #4c5eba);
+      /*background: linear-gradient(#5f76e8, #4c5eba);
       font-family: 'Titillium Web', sans-serif;
       padding: 15px;
       border: 1px solid #4c5eba;
       border-radius: 15px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-      /*min-width: 420px;*/
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);*/
+      width: 100%;
       min-height: 300px;
       display: grid;
-      /*grid-template-columns: 1fr 1fr;*/
       grid-template-columns: 1fr;
-      align-items: center;
+      justify-content: center;
     }
 
     .container .signup-icon {
@@ -64,7 +63,7 @@
       text-align: center;
       text-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
       vertical-align: top;
-      display: inline-block;
+      display: none;
     }
 
     .container .signup-icon i {
@@ -83,13 +82,11 @@
       text-decoration: underline;
     }
 
-    .form-login {
+    .form-container {
       background: rgba(255, 255, 255, 0.99);
-      min-width: 300px;
+      min-width: 100%;
       min-height: 340px;
-      padding: 20px 30px;
-      margin-top: -30px;
-      margin-bottom: -30px;
+      padding: 20px 15px;
       border-radius: 15px;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
       display: grid;
@@ -97,12 +94,48 @@
       justify-items: center;
     }
 
-    .form-login .title {
+    .form-container .title {
       color: #000;
       font-size: 25px;
       font-weight: 600;
       text-transform: capitalize;
       padding: 10px 0px 10px 0px;
+    }
+
+    @media (min-width: 576px) {
+      .container {
+        background: linear-gradient(#5f76e8, #4c5eba);
+        font-family: 'Titillium Web', sans-serif;
+        padding: 15px;
+        border: 1px solid #4c5eba;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        min-width: 420px;
+        min-height: 300px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+      }
+
+      .container .signup-icon {
+        display: block;
+      }
+
+      .form-container {
+        background: rgba(255, 255, 255, 0.99);
+        min-width: 300px;
+        min-height: 340px;
+        padding: 20px 30px;
+        margin-top: -30px;
+        margin-bottom: -30px;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        display: grid;
+        grid-template-columns: 1fr;
+        justify-items: center;
+      }
+
+
     }
   </style>
 
