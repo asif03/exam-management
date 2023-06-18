@@ -1,0 +1,70 @@
+<aside class="left-sidebar" data-sidebarbg="skin6">
+  <!-- Sidebar scroll-->
+  <div class="scroll-sidebar" data-sidebarbg="skin6">
+    <!-- Sidebar navigation-->
+    <nav class="sidebar-nav">
+      <ul id="sidebarnav">
+        <li class="sidebar-item @if(Route::current()->getName() == 'home') selected @endif">
+          <a class="sidebar-link sidebar-link" href="{{ url('home') }}" aria-expanded="false">
+            <i data-feather="home" class="feather-icon"></i>
+            <span class="hide-menu">Dashboard</span>
+          </a>
+        </li>
+        <li class="list-divider"></li>
+        <li class="nav-small-cap"><span class="hide-menu">Examination</span></li>
+        <li class="sidebar-item @if(Request::segment(2) == 'edit-ospe-ioe-details-schedule') selected @endif">
+          <a class=" sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+            <i data-feather="file-text" class="feather-icon"></i>
+            <span class="hide-menu">OSPE/OSCE/IOE</span>
+          </a>
+          <ul aria-expanded="false" class="collapse first-level base-level-line">
+            <li class="sidebar-item">
+              <a href="{{ route('schedules') }}" class="sidebar-link">
+                <span class="hide-menu">Schedules</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{{ route('landing-details') }}" class="sidebar-link">
+                <span class="hide-menu">Invisilator Selection</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href=" {{ route('ospeioe-reports') }}" class="sidebar-link">
+                <span class="hide-menu">Schedule Details</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="ui-cards.html" aria-expanded="false"><i
+              data-feather="sidebar" class="feather-icon"></i><span class="hide-menu">Cards
+            </span></a>
+        </li>
+        <li class="list-divider"></li>
+        <li class="nav-small-cap"><span class="hide-menu">Settings</span></li>
+
+        <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="authentication-login1.html"
+            aria-expanded="false"><i data-feather="lock" class="feather-icon"></i><span class="hide-menu">Login
+            </span></a>
+        </li>
+        <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="authentication-register1.html"
+            aria-expanded="false"><i data-feather="lock" class="feather-icon"></i><span class="hide-menu">Register
+            </span></a>
+        </li>
+
+        <li class="list-divider"></li>
+        <li class="sidebar-item">
+          <a class="sidebar-link sidebar-link" href="{{ route('logout') }}" aria-expanded="false" onclick="event.preventDefault();
+          document.getElementById('logout-form').submit();">
+            <i data-feather="log-out" class="feather-icon"></i>
+            <span class="hide-menu">{{ __('Logout') }}</span>
+          </a>
+          <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+            @csrf
+          </form>
+        </li>
+      </ul>
+    </nav>
+    <!-- End Sidebar navigation -->
+  </div>
+  <!-- End Sidebar scroll-->
+</aside>
