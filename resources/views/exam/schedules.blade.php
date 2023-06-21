@@ -42,13 +42,13 @@
                 <tr>
                   <th>ID</th>
                   <th>Type</th>
-                  <th>Mother Subject</th>
+                  <th>Subject</th>
                   <th>Date</th>
                   <th>Reporting Time</th>
                   <th>Start Time</th>
                   <th>End Time</th>
                   <th>Hall No</th>
-                  <th>Schedule?</th>
+                  <th>Meeting?</th>
                   <th>Meeting Date</th>
                   <th>Meeting Time</th>
                   <th>Active?</th>

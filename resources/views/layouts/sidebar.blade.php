@@ -35,20 +35,41 @@
             </li>
           </ul>
         </li>
-        <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="ui-cards.html" aria-expanded="false"><i
+        <!--<li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="ui-cards.html" aria-expanded="false"><i
               data-feather="sidebar" class="feather-icon"></i><span class="hide-menu">Cards
             </span></a>
-        </li>
+        </li>-->
         <li class="list-divider"></li>
         <li class="nav-small-cap"><span class="hide-menu">Settings</span></li>
-
-        <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="authentication-login1.html"
-            aria-expanded="false"><i data-feather="lock" class="feather-icon"></i><span class="hide-menu">Login
-            </span></a>
+        <li class="sidebar-item">
+          <a class="sidebar-link sidebar-link" href="{{ route('mothersubjects.index') }}" aria-expanded="false">
+            <i class="icon-notebook"></i>
+            <span class="hide-menu">Mother Subject Info</span>
+          </a>
         </li>
-        <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="authentication-register1.html"
-            aria-expanded="false"><i data-feather="lock" class="feather-icon"></i><span class="hide-menu">Register
-            </span></a>
+        <li class="sidebar-item">
+          <a class="sidebar-link sidebar-link" href="{{ route('subjects.index') }}" aria-expanded="false">
+            <i class="icon-notebook"></i>
+            <span class="hide-menu">Subject Info</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link sidebar-link" href="{{ route('allied-subjects.index') }}" aria-expanded="false">
+            <i class="icon-notebook"></i>
+            <span class="hide-menu">Allied Subject Info</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link sidebar-link" href="{{ route('exam-halls.index') }}" aria-expanded="false">
+            <i class="fas fa-home"></i>
+            <span class="hide-menu">Hall Info</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link sidebar-link" href="{{ route('exam-schedule-roles.index') }}" aria-expanded="false">
+            <i class="fas fa-home"></i>
+            <span class="hide-menu">Invisilator Position Info</span>
+          </a>
         </li>
 
         <li class="list-divider"></li>

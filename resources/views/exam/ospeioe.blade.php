@@ -99,8 +99,8 @@
                         <div class="row">
                             <div class="col">
                                 <div class="form-floating mb-1">
-                                    <input type="text" class="form-control" name="exam_date" id="exam_date" value=""
-                                        required maxlength="15">
+                                    <input type="text" class="form-control" name="exam_date" id="exam_date"
+                                        autocomplete="off" required>
                                     <label for="exam_date">Date [YYYY-MM-DD]</label>
                                 </div>
                             </div>
@@ -121,24 +121,24 @@
                         <div class="row">
                             <div class="col">
                                 <div class="form-floating mb-1">
-                                    <input type="text" class="form-control" name="reporting_time" id="reporting_time"
-                                        required>
+                                    <input type="time" class="form-control" name="reporting_time" id="reporting_time"
+                                        required />
                                     <label for="reporting_time">Reporting Time</label>
                                 </div>
                             </div>
 
                             <div class="col">
                                 <div class="form-floating mb-1">
-                                    <input type="text" class="form-control" name="exam_start_time" id="exam_start_time"
-                                        value="" required maxlength="15">
+                                    <input type="time" class="form-control" name="exam_start_time" id="exam_start_time"
+                                        required />
                                     <label for="exam_start_time">Start Time</label>
                                 </div>
                             </div>
 
                             <div class="col">
                                 <div class="form-floating mb-1">
-                                    <input type="text" class="form-control" name="exam_end_time" id="exam_end_time"
-                                        value="" required maxlength="15">
+                                    <input type="time" class="form-control" name="exam_end_time" id="exam_end_time"
+                                        required />
                                     <label for="exam_end_time">End Time</label>
                                 </div>
                             </div>
@@ -159,15 +159,15 @@
                             <div class="col">
                                 <div class="form-floating mb-1">
                                     <input type="text" class="form-control" name="meeting_date" id="meeting_date"
-                                        value="" required readonly maxlength="15">
+                                        required />
                                     <label for="meeting_date">Meeting Date</label>
                                 </div>
                             </div>
 
                             <div class="col">
                                 <div class="form-floating mb-1">
-                                    <input type="text" class="form-control" name="meeting_time" id="meeting_time"
-                                        value="" required readonly maxlength="15">
+                                    <input type="time" class="form-control" name="meeting_time" id="meeting_time"
+                                        required />
                                     <label for="meeting_time">Meeting Time</label>
                                 </div>
                             </div>
@@ -187,79 +187,135 @@
 
     <script>
         $(document).ready(function() {  
-            alert('asif');  
-      billingDeal();
 
-      jQuery('#reporting_time').timepicker({});
-      alert('babu');
+            billingDeal();
+            
+            $('#exam_date').datepicker({
+                format: "yyyy-mm-dd",
+                startDate: '-3d'
+            });
 
-    });
+            $('#meeting_date').datepicker({
+                format: "yyyy-mm-dd",
+                startDate: '-3d'
+            });
 
-    function billingDeal(){
-          if ($('#is_schedule_meeting_chk').is(':checked')) {
-        $('#meeting_date').prop('readonly', false);
-        $('#meeting_time').prop('readonly', false);
-        $('#is_schedule_meeting').val("1");
-      }else{
-        $('#meeting_date').prop('readonly', true);
-        $('#meeting_time').prop('readonly', true);
-        $('#is_schedule_meeting').val("0");
-      }
-      }
+            $('#reporting_time').datetimepicker({
+                useCurrent: true,
+                format: "hh:mm A"
+            });
 
-    var date = new Date();
+            $('#exam_start_time').datetimepicker({
+                useCurrent: true,
+                format: "hh:mm A"
+            });
 
-    let mn = parseInt(date.getMonth())+1;
-    mn = mn.toString().length==1 ? '0' + mn : mn;
-    let dt = date.getDate();
-    dt = dt.toString().length==1 ? '0' + dt : dt;
-    var formattedDate = date.getFullYear()+"-"+mn+"-"+dt;
+            $('#exam_end_time').datetimepicker({
+                useCurrent: true,
+                format: "hh:mm A"
+            });
 
-    var new_time = DateFormat(date);
-    var next_time = AddMinutesToDate(date, 50);
-    var next_time_fiveminplus = AddMinutesToDate(date, 5);
-    $("#exam_date").val(formattedDate);
-    //$("#meeting_date").val(formattedDate);
-    //$("#reporting_time").val(new_time);
-    //$("#meeting_time").val(DateFormat(AddMinutesToDate(date, -5)));
-    $("#exam_start_time").val(DateFormat(next_time_fiveminplus));
-    $("#exam_end_time").val(DateFormat(next_time));
-    var have_schedule;
+            $('#meeting_time').datetimepicker({
+                useCurrent: true,
+                format: "hh:mm A"
+            });
+        });
 
-    function submitForm() {
-      if (!$('#hall_id').val()) {
-        alert("hall_no Can't be Empty.");
-        return false;
-    }
-    else if (!$('#mother_subject_id').val()) {
-        alert("Subject Can't be Empty.");
-        return false;
-    }
-    else if (!$('#exam_type_id').val()) {
-        alert("Exam type Can't be Empty.");
-        return false;
-    }
-    else{
-        return confirm('Do you want to save?');
-    }
-    }
+        function billingDeal(){
+            if ($('#is_schedule_meeting_chk').is(':checked')) {
+                $('#meeting_date').prop('readonly', false);
+                $('#meeting_time').prop('readonly', false);
+                $('#is_schedule_meeting').val("1");
+            } else {
+                $('#meeting_date').prop('readonly', true);
+                $('#meeting_time').prop('readonly', true);
+                $('#is_schedule_meeting').val("0");
+            }
+        }
 
-    function AddMinutesToDate(date, minutes) {
-      return new Date(date.getTime() + minutes*60000);
-    }
-    function DateFormat(date){
-      var days = date.getDate();
-      var year = date.getFullYear();
-      var month = (date.getMonth()+1);
-      var hours = date.getHours();
-      var minutes = date.getMinutes();
-      var newformat = hours >= 12 ? 'PM' : 'AM';
-      hours = hours % 12;
-      hours = hours ? hours : 12;
-      minutes = minutes < 10 ? '0' + minutes : minutes;
-      var new_time = hours + ':' + minutes + ' ' + newformat;
-      return new_time;
-    }
+        /*var date = new Date();
+
+        let mn = parseInt(date.getMonth())+1;
+        mn = mn.toString().length==1 ? '0' + mn : mn;
+        let dt = date.getDate();
+        dt = dt.toString().length==1 ? '0' + dt : dt;
+        var formattedDate = date.getFullYear()+"-"+mn+"-"+dt;
+
+        var new_time = DateFormat(date);
+        var next_time = AddMinutesToDate(date, 50);
+        var next_time_fiveminplus = AddMinutesToDate(date, 5);*/
+        //$("#exam_date").val(formattedDate);
+        //$("#meeting_date").val(formattedDate);
+        //$("#reporting_time").val(new_time);
+        //$("#meeting_time").val(DateFormat(AddMinutesToDate(date, -5)));
+        //$("#exam_start_time").val(DateFormat(next_time_fiveminplus));
+        //$("#exam_end_time").val(DateFormat(next_time));
+        //var have_schedule;
+
+        function submitForm() {
+        
+            if (!$('#hall_id').val()) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Hall No. Can't be blank!"
+                })
+                return false;
+
+            } else if (!$('#mother_subject_id').val()) {
+                
+                Swal.fire({
+                    icon: "error",
+                    title: "Subject Can't be blank!"
+                })
+                return false;
+
+            } else if (!$('#exam_type_id').val()) {
+                
+                Swal.fire({
+                    icon: "error",
+                    title: "Exam type Can't be blank!"
+                })
+                return false;
+
+            } else {
+
+                /*Swal.fire({
+                    title: 'Do you want to save the changes?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire('Saved!', '', 'success');
+                    }
+                });*/
+
+                return confirm('Do you want to save?');
+            }
+        }
+
+        function AddMinutesToDate(date, minutes) {
+            return new Date(date.getTime() + minutes*60000);
+        }
+
+        function DateFormat(date){
+
+            var days = date.getDate();
+            var year = date.getFullYear();
+            var month = (date.getMonth()+1);
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var newformat = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            var new_time = hours + ':' + minutes + ' ' + newformat;
+            
+            return new_time;
+        }
     </script>
 </div>
 @endsection
