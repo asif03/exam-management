@@ -86,7 +86,8 @@
       <!-- footer -->
       <!-- ============================================================== -->
       <footer class="footer text-center text-muted">
-        All Rights Reserved by Freedash. Designed and Developed by <a href="https://adminmart.com/">Adminmart</a>.
+        Copyright &copy; @php echo date('Y'); @endphp <a href="https://bcps.edu.bd/">Bangladesh College of
+          Physicians & Surgeons</a>. All rights reserved.
       </footer>
       <!-- ============================================================== -->
       <!-- End footer -->

@@ -1,46 +1,49 @@
-@extends('layouts.master')
+@extends('layouts.app')
 
 @section('content')
-<!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
-  <!-- Content Header (Page header) -->
-  <div class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-6">
-          <h1 class="m-0">Hall Info</h1>
-        </div><!-- /.col -->
-        <div class="col-sm-6">
-          <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="{{ route('it-dashboard') }}">Home</a></li>
-            <li class="breadcrumb-item active">Hall Info</li>
+<!-- ============================================================== -->
+<!-- Bread crumb and right sidebar toggle -->
+<!-- ============================================================== -->
+<div class="page-breadcrumb">
+  <div class="row">
+    <div class="col-7 align-self-center">
+      <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Hall Info</h4>
+      <div class="d-flex align-items-center">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb m-0 p-0">
+            <li class="breadcrumb-item"><a href="{{ url('home') }}" class="text-muted">Home</a></li>
+            <li class="breadcrumb-item text-muted active" aria-current="page">Hall</li>
           </ol>
-        </div><!-- /.col -->
-      </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+        </nav>
+      </div>
+    </div>
+    <div class="col-5 d-flex justify-content-end">
+      <a href="{{route('exam-halls.create')}}" class="btn btn-primary btn-rounded mt-2">
+        <i class="fas fa-plus"></i> Add New
+      </a>
+    </div>
   </div>
-  <!-- /.content-header -->
-
-  <!-- Main content -->
-  <section class="content">
-    <div class="container-fluid">
-
-      <!-- Main row -->
-      <div class="row">
-        <div class="container d-flex flex-column">
-          <div class="d-flex flex-row-reverse">
-            <a href="{{route('exam-halls.create')}}" class="btn btn-primary">
-              <i class="fa-solid fa-plus"></i> Hall Info
-            </a>
-          </div>
-          <div class="mt-3">
-            <x-alert />
+</div>
+<!-- ============================================================== -->
+<!-- End Bread crumb and right sidebar toggle -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- Start Page Content -->
+<!-- ============================================================== -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Hall List</h5>
+          <x-alert />
+          <div class="table-responsive">
             <table id="listhall" class="table table-striped bo" style="width:100%">
               <thead>
                 <tr>
                   <th>Block Name</th>
                   <th>Hall Name</th>
-                  <th>Is Active?</th>
+                  <th>Status</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -51,14 +54,16 @@
                   <td>{{ $hall->hall_name }}</td>
                   <td>
                     @if($hall->active==1)
-                    <small class="badge badge-success"><i class="fa fa-check" aria-hidden="true"></i> Active</small>
+                    <i class="fa fa-circle text-success font-12" data-bs-toggle="tooltip" data-placement="top"
+                      title="Active"></i>
                     @else
-                    <small class="badge badge-danger"><i class="fa fa-trash" aria-hidden="true"></i> In-active</small>
+                    <i class="fa fa-circle text-danger font-12" data-bs-toggle="tooltip" data-placement="top"
+                      title="In Active"></i>
                     @endif
                   </td>
                   <td>
                     <a class="btn btn-primary btn-sm" href="{{ route('exam-halls.edit', $hall->id) }}">
-                        <i class="fas fa-edit"></i></a>
+                      <i class="fas fa-edit"></i></a>
                     @if($hall->active==1)
                     <button class="btn btn-danger btn-sm"
                       onclick="event.preventDefault();document.getElementById('form-inactive-{{ $hall->id }}').submit()">
@@ -72,7 +77,7 @@
                     @else
                     <button class="btn btn-success btn-sm"
                       onclick="event.preventDefault();document.getElementById('form-active-{{ $hall->id }}').submit()">
-                        <i class="fa fa-check" aria-hidden="true"></i></button>
+                      <i class="fa fa-check" aria-hidden="true"></i></button>
                     <form class="hidden" id="{{'form-active-'.$hall->id}}"
                       action="{{ route('exam-hall.active', $hall->id) }}" method="POST">
                       @csrf
@@ -87,19 +92,14 @@
           </div>
         </div>
       </div>
-
-      <script>
-        $(document).ready(function() {
-            $('#listhall').DataTable({
-                "order": [[ 1, "asc" ]]
-            });
-          });
-      </script>
     </div>
-    <!-- /.row (main row) -->
-</div><!-- /.container-fluid -->
-</section>
-<!-- /.content -->
+  </div>
+  <script>
+    $(document).ready(function() {
+        $('#listhall').DataTable({
+            "order": [[ 1, "asc" ]]
+        });
+    });
+  </script>
 </div>
-<!-- /.content-wrapper -->
 @endsection

@@ -47,7 +47,7 @@
                   <th>FCPS</th>
                   <th>MCPS</th>
                   <th>Speciality Code</th>
-                  <th>Is Active?</th>
+                  <th>Status</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -61,9 +61,11 @@
                   <td>{{ $subject->sp_code }}</td>
                   <td>
                     @if($subject->active==1)
-                    <small class="badge badge-success"><i class="fa fa-check" aria-hidden="true"></i> Active</small>
+                    <i class="fa fa-circle text-success font-12" data-bs-toggle="tooltip" data-placement="top"
+                      title="Active"></i>
                     @else
-                    <small class="badge badge-danger"><i class="fa fa-trash" aria-hidden="true"></i> In-active</small>
+                    <i class="fa fa-circle text-danger font-12" data-bs-toggle="tooltip" data-placement="top"
+                      title="In Active"></i>
                     @endif
                   </td>
                   <td>

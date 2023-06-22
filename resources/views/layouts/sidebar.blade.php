@@ -67,8 +67,8 @@
         </li>
         <li class="sidebar-item">
           <a class="sidebar-link sidebar-link" href="{{ route('exam-schedule-roles.index') }}" aria-expanded="false">
-            <i class="fas fa-home"></i>
-            <span class="hide-menu">Invisilator Position Info</span>
+            <i class="fas fa-sort-amount-down"></i>
+            <span class="hide-menu">Invisilator's Designation</span>
           </a>
         </li>
 

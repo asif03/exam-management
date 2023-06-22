@@ -1,68 +1,78 @@
-@extends('layouts.master')
+@extends('layouts.app')
 
 @section('content')
-<!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
-  <!-- Content Header (Page header) -->
-  <div class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-6">
-          <h1 class="m-0">Hall Info</h1>
-        </div><!-- /.col -->
-        <div class="col-sm-6">
-          <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="{{ route('it-dashboard') }}">Home</a></li>
-            <li class="breadcrumb-item active">Hall Info</li>
+<!-- ============================================================== -->
+<!-- Bread crumb and right sidebar toggle -->
+<!-- ============================================================== -->
+<div class="page-breadcrumb">
+  <div class="row">
+    <div class="col-7 align-self-center">
+      <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Hall Info</h4>
+      <div class="d-flex align-items-center">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb m-0 p-0">
+            <li class="breadcrumb-item"><a href="{{ url('home') }}" class="text-muted">Home</a></li>
+            <li class="breadcrumb-item text-muted active" aria-current="page">Hall</li>
           </ol>
-        </div><!-- /.col -->
-      </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+        </nav>
+      </div>
+    </div>
+    <div class="col-5 d-flex justify-content-end">
+      <a href="{{ route('exam-halls.index') }}" class="btn btn-primary btn-rounded mt-2">
+        <i class="fas fa-list"></i> Hall List
+      </a>
+    </div>
   </div>
-  <!-- /.content-header -->
-
-  <!-- Main content -->
-  <section class="content">
-    <div class="container-fluid">
-      <!-- Main row -->
-
-      <form action="{{ route('exam-halls.store') }}" method="POST">
-        @csrf
-        <x-alert />
-        <div class="row">
-          <div class="col">
-            <div class="form-floating mb-1">
-              <select class="form-select" name="block_id" id="block_id" aria-label="block_id" required>
-                <option value="">Select</option>
-                @foreach($blocks as $block)
-                <option value="{{ $block->id }}" @if($block->id==old('block_id')) selected @endif>{{
-                  $block->block_name}}</option>
-                @endforeach
-              </select>
-              <label for="block_id">Block Name</label>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="form-floating mb-1">
-              <input type="text" class="form-control" name="hall_name" id="hall_name" value="{{ old('hall_name') }}"
-                required>
-              <label for="hall_name">Hall Name</label>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <div class="text-left p-2">
-              <button type="submit" class="btn btn-primary">Save</button>
-            </div>
-          </div>
-        </div>
-      </form>
-      <!-- /.row (main row) -->
-    </div><!-- /.container-fluid -->
-  </section>
-  <!-- /.content -->
 </div>
-<!-- /.content-wrapper -->
+<!-- ============================================================== -->
+<!-- End Bread crumb and right sidebar toggle -->
+<!-- ============================================================== -->
+
+<!-- ============================================================== -->
+<!-- Start Page Content -->
+<!-- ============================================================== -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">New Hall</h5>
+          <x-alert />
+          <form action="{{ route('exam-halls.store') }}" method="POST">
+            @csrf
+            <div class="row">
+              <div class="col">
+                <div class="form-floating mb-1">
+                  <select class="form-select" name="block_id" id="block_id" aria-label="block_id" required>
+                    <option value="">Select</option>
+                    @foreach($blocks as $block)
+                    <option value="{{ $block->id }}" @if($block->id==old('block_id')) selected @endif>{{
+                      $block->block_name}}</option>
+                    @endforeach
+                  </select>
+                  <label for="block_id">Block Name</label>
+                </div>
+              </div>
+
+              <div class="col">
+                <div class="form-floating mb-1">
+                  <input type="text" class="form-control" name="hall_name" id="hall_name" value="{{ old('hall_name') }}"
+                    required>
+                  <label for="hall_name">Hall Name</label>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="text-center p-2">
+                  <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 @endsection
