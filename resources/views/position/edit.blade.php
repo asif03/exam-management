@@ -1,64 +1,73 @@
-@extends('layouts.master')
+@extends('layouts.app')
 
 @section('content')
-<!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
-  <!-- Content Header (Page header) -->
-  <div class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-6">
-          <h1 class="m-0">Edit Position Info</h1>
-        </div><!-- /.col -->
-        <div class="col-sm-6">
-          <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="{{ route('it-dashboard') }}">Home</a></li>
-            <li class="breadcrumb-item active"><a href="{{route('exam-schedule-roles.index')}}">Position Info</a></li>
+<!-- ============================================================== -->
+<!-- Bread crumb and right sidebar toggle -->
+<!-- ============================================================== -->
+<div class="page-breadcrumb">
+  <div class="row">
+    <div class="col-7 align-self-center">
+      <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Invisilator's Role Info</h4>
+      <div class="d-flex align-items-center">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb m-0 p-0">
+            <li class="breadcrumb-item"><a href="{{ url('home') }}" class="text-muted">Home</a></li>
+            <li class="breadcrumb-item text-muted active" aria-current="page">Position Info</li>
           </ol>
-        </div><!-- /.col -->
-      </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
-  </div>
-  <!-- /.content-header -->
-
-  <!-- Main content -->
-  <section class="content">
-    <div class="container-fluid">
-      <!-- Main row -->
-      <form action="{{ route('exam-schedule-roles.update', $examScheduleRole->id) }}" method="POST">
-        @method('PATCH')
-        @csrf
-        <x-alert />
-        <div class="row">
-
-          <div class="col">
-            <div class="form-floating mb-1">
-              <input type="text" class="form-control" name="position_name" id="position_name"
-                value="{{ $examScheduleRole->position_name }}" required>
-              <label for="position_name">Position Name</label>
-            </div>
-          </div>
-          <div class="col">
-            <div class="form-floating mb-1">
-              <input type="text" class="form-control" name="description" id="description"
-                value="{{ $examScheduleRole->description }}">
-              <label for="description">Remarks (If Any)</label>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <div class="text-left p-2">
-              <button type="submit" class="btn btn-primary">Update</button>
-            </div>
-          </div>
-        </div>
-      </form>
+        </nav>
+      </div>
     </div>
-    <!-- /.row (main row) -->
-</div><!-- /.container-fluid -->
-</section>
-<!-- /.content -->
+    <div class="col-5 d-flex justify-content-end">
+      <a href="{{ route('exam-schedule-roles.index') }}" class="btn btn-primary btn-rounded mt-2">
+        <i class="fas fa-list"></i> Role List
+      </a>
+    </div>
+  </div>
 </div>
-<!-- /.content-wrapper -->
+<!-- ============================================================== -->
+<!-- End Bread crumb and right sidebar toggle -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- Start Page Content -->
+<!-- ============================================================== -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Edit Mother Subject</h5>
+          <x-alert />
+          <form action="{{ route('exam-schedule-roles.update', $examScheduleRole->id) }}" method="POST">
+            @method('PATCH')
+            @csrf
+            <div class="row">
+
+              <div class="col">
+                <div class="form-floating mb-1">
+                  <input type="text" class="form-control" name="position_name" id="position_name"
+                    value="{{ $examScheduleRole->position_name }}" required>
+                  <label for="position_name">Position Name</label>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-floating mb-1">
+                  <input type="text" class="form-control" name="description" id="description"
+                    value="{{ $examScheduleRole->description }}">
+                  <label for="description">Remarks (If Any)</label>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="text-left p-2">
+                  <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 @endsection

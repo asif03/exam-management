@@ -51,7 +51,7 @@
                   <th>Meeting?</th>
                   <th>Meeting Date</th>
                   <th>Meeting Time</th>
-                  <th>Active?</th>
+                  <th>Status</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -68,58 +68,42 @@
       getListFn();
     });
 
-    function getListFn() {
+  function getListFn() {
 
     $.ajax({
       type: "get",
-       url: '{{URL::to('/exam/get-sche-master')}}',
+      url: '{{URL::to('/exam/get-sche-master')}}',
       data: null,
       dataType: "json",
       success: function(data) {
-
         dataTab = $('#scheduleInfoTable').DataTable({
           "aaData": data,
-          "columns": [{
-              "data": "id"
-            },
+          "columns": [
+            {"data": "id"},
+            {"data": "exam_type_id"},
+            {"data": "subject_name"},
+            {"data": "exam_date"},
+            {"data": "reporting_time"},
+            {"data": "exam_start_time"},
+            {"data": "exam_end_time"},
+            {"data": "hall_id"},
+            {"data": "is_schedule_meeting"},
+            {"data": "meeting_date"},
+            {"data": "meeting_time"},
             {
-              "data": "exam_type_id"
-            },
-            {
-              "data": "subject_name"
-            },
-            {
-              "data": "exam_date"
-            },
-            {
-              "data": "reporting_time"
-            },
-            {
-              "data": "exam_start_time" //5
-            },
-            {
-              "data": "exam_end_time"
-            },
-            {
-              "data": "hall_id"
-            },
-            {
-              "data": "is_schedule_meeting" //8
-            },
-            {
-              "data": "meeting_date"
-            },
-            {
-              "data": "meeting_time" //10
-            },
-            {
-              "data": "active" //11
+              "data": function(data) {
+                if(data.active === 1) {
+                  return '<i class="fa fa-circle text-success font-12" data-bs-toggle="tooltip" data-placement="top" title="Active"></i>';
+                } else {
+                  return '<i class="fa fa-circle text-danger font-12" data-bs-toggle="tooltip" data-placement="top" title="In Active"></i>';
+                }
+              }
             },
             {
               "data": function(data, type, row, meta) {
                 urie = "{{ route('edit-schedule-master','lid')}}";
                 urie = urie.replace('lid', data.id);
-                return '<a href="' + urie + '" class = "editor-edit"> Edit</a>';
+                return '<a href="' + urie + '" class = "editor-edit"><i class="fas fa-edit"></i></a>';
               },
               "className": "text-indigo-600 hover:text-indigo-900",
               "orderable": false,
@@ -129,17 +113,18 @@
             "targets": [0],
             "visible": false,
           },
-          { targets : [8,11],
-            render : function (data, type, row) {
+          {
+            "targets" : [8],
+            "render" : function (data, type, row) {
               return data == '0' ? 'No' : 'Yes';
-        }
-      },
-
-        ]
+            },
+          }
+          ]
         });
       }
     });
-     dataTab.destroy();
+    
+    dataTab.destroy();
   }
   </script>
 </div>
