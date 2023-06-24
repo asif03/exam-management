@@ -46,7 +46,7 @@ class HomeController extends Controller
         dd($userAccessModules);*/
 
         $nowTime = Carbon::now('Asia/Dhaka')->toDateTimeString();
-        $nowHour = Carbon::createFromFormat('Y-m-d H:i:s', $nowTime)->format('h');
+        $nowHour = Carbon::createFromFormat('Y-m-d H:i:s', $nowTime)->format('H');
 
         return view('home', [
             'modules'     => $userAccessModules,

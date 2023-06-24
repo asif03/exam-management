@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\DB;
 
 class ExamHallController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function menus()
     {
         $userModel = new User();
