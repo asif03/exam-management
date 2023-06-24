@@ -73,6 +73,7 @@
     }
 
     .container .signup-icon .signup a {
+      font-size: 15px;
       color: #fff;
       text-transform: capitalize;
       transition: all 0.3s ease;
