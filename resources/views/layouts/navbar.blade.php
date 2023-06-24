@@ -34,8 +34,8 @@
       <!-- toggle and nav items -->
       <!-- ============================================================== -->
       <ul class="navbar-nav float-left me-auto ms-3 ps-1">
-        <!-- Notification -->
-        <li class="nav-item dropdown">
+
+        <!--<li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle pl-md-3 position-relative" href="javascript:void(0)" id="bell"
             role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <span><i data-feather="bell" class="svg-icon"></i></span>
@@ -45,7 +45,7 @@
             <ul class="list-style-none">
               <li>
                 <div class="message-center notifications position-relative">
-                  <!-- Message -->
+                  
                   <a href="javascript:void(0)" class="message-item d-flex align-items-center border-bottom px-3 py-2">
                     <div class="btn btn-danger rounded-circle btn-circle"><i data-feather="airplay"
                         class="text-white"></i></div>
@@ -57,7 +57,7 @@
                       <span class="font-12 text-nowrap d-block text-muted">9:30 AM</span>
                     </div>
                   </a>
-                  <!-- Message -->
+                  
                   <a href="javascript:void(0)" class="message-item d-flex align-items-center border-bottom px-3 py-2">
                     <span class="btn btn-success text-white rounded-circle btn-circle"><i data-feather="calendar"
                         class="text-white"></i></span>
@@ -68,7 +68,7 @@
                       <span class="font-12 text-nowrap d-block text-muted">9:10 AM</span>
                     </div>
                   </a>
-                  <!-- Message -->
+                  
                   <a href="javascript:void(0)" class="message-item d-flex align-items-center border-bottom px-3 py-2">
                     <span class="btn btn-info rounded-circle btn-circle"><i data-feather="settings"
                         class="text-white"></i></span>
@@ -80,7 +80,7 @@
                       <span class="font-12 text-nowrap d-block text-muted">9:08 AM</span>
                     </div>
                   </a>
-                  <!-- Message -->
+                  
                   <a href="javascript:void(0)" class="message-item d-flex align-items-center border-bottom px-3 py-2">
                     <span class="btn btn-primary rounded-circle btn-circle"><i data-feather="box"
                         class="text-white"></i></span>
@@ -101,12 +101,12 @@
               </li>
             </ul>
           </div>
-        </li>
+        </li>-->
         <!-- End Notification -->
         <!-- ============================================================== -->
         <!-- create new -->
         <!-- ============================================================== -->
-        <li class="nav-item dropdown">
+        <!--<li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
             <i data-feather="settings" class="svg-icon"></i>
@@ -117,7 +117,7 @@
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#">Something else here</a>
           </div>
-        </li>
+        </li>-->
         <li class="nav-item d-none d-md-block">
           <a class="nav-link" href="javascript:void(0)">
             <div class="customize-input">
