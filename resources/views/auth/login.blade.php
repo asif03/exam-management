@@ -9,7 +9,7 @@
     <div class="form-container">
         <img src="{{ asset('images/bcps.png') }}" height="80" width="80" alt="Logo">
         <span class="title">{{ __('Login') }}</span>
-        <form method="POST" action="{{ route('login') }}">
+        <form method="POST" action="{{ route('login') }}" style="width: 100%;">
             @csrf
             <div class="row mb-2">
                 <div class="form-floating">
@@ -51,17 +51,14 @@
             </div>
 
             <div class="row mb-0">
-
                 <button type="submit" class="btn btn-primary">
                     {{ __('Login') }}
                 </button>
-
                 @if (Route::has('password.request'))
                 <a class="btn btn-link" href="{{ route('password.request') }}">
                     {{ __('Forgot Your Password?') }}
                 </a>
                 @endif
-
             </div>
         </form>
     </div>

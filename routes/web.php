@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,13 +18,14 @@ Route::get('/', function () {
     return redirect('/login');
 });
 
-
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-require __DIR__ . '/admin.php';
-require __DIR__ . '/it.php';
-require __DIR__ . '/exam.php';
-require __DIR__ . '/rtm.php';
-require __DIR__ . '/others.php';
+Route::middleware(['verified'])->group(function () {
+    require __DIR__ . '/admin.php';
+    require __DIR__ . '/it.php';
+    require __DIR__ . '/exam.php';
+    require __DIR__ . '/rtm.php';
+    require __DIR__ . '/others.php';
+});

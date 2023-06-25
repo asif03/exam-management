@@ -26,7 +26,7 @@ class ExamDashboardController extends Controller
     public function index()
     {
         $menus = $this->menus();
-        return view('layouts.dashboard', [ 'menus' => $menus]);
+        return view('exam.dashboard', ['menus' => $menus]);
 
     }
 }

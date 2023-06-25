@@ -51,13 +51,12 @@
                     <div class="alert alert-primary text-center">
                         <strong>Welcome To BCPS ERP Solution!</strong>
                     </div>
+                    @if (session('status'))
+                    <div class="alert alert-success text-center" role="alert">
+                        <strong>{{ session('status') }}</strong>
+                    </div>
+                    @endif
                     <div class="card-body d-flex flex-row p-2">
-                        @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                        @endif
-
                         @foreach($modules as $module)
                         @if($module->dashboard!=null)
                         <div class="card d-flex flex-column align-items-center m-1" style="width: 13rem;">
