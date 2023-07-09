@@ -89,7 +89,11 @@
         </td>
       </tr>
       <tr>
-        <td style="font-size: 14px; text-align: left; width: 35%;">{!! nl2br(e($invigilator->office_add)) !!}</td>
+        @if ($invigilator->office_add ==! NULL)
+        <td style="font-size: 14px; text-align: left; width: 35%;">{!! nl2br(e($invigilator->office_add)) !!} Asif</td>
+        @else
+        <td style="font-size: 14px; text-align: left; width: 35%;">{!! nl2br(e($invigilator->home_add)) !!}</td>
+        @endif
       </tr>
       <tr>
         <td style="font-size: 14px; text-align: left;">{{ $invigilator->mobile }}</td>
@@ -101,15 +105,16 @@
     <br>
     <table width="100%" style="float: left;">
       <tr>
-        <td colspan="2" style="font-size: 14px; text-align: left; padding-top: 15px;">Dear Sir,</td>
+        <td colspan="2" style="font-size: 14px; text-align: left; padding-top: 15px;">Sir,</td>
       </tr>
       <tr>
         <td colspan="2" style="font-size: 14px; text-align: left; padding-top: 5px;">
           In connection with the conduction of the functions of {{ $schedule->exam_type }} in FCPS Part-II
           {{ $schedule->subject_name }}, it is my great pleasure to offer you an appointment as a
           {{ $invigilator->position_name }}. For this purpose, you will be required to come to the
-          Examinations Department of the college on {{ date('d-m-Y', strtotime($schedule->exam_date)) }} at {{
-          $schedule->exam_start_time }}.
+          {{ $schedule->block_name }}, {{ $schedule->hall_name }}
+          of the College on {{ date('d-m-Y', strtotime($schedule->exam_date)) }} at {{
+          $schedule->exam_start_time }} AM.
         </td>
       </tr>
       <tr>
@@ -121,7 +126,7 @@
       </tr>
       <tr>
         <td colspan="2" style="font-size: 14px; text-align: left; padding-top: 5px;">
-          The college will take care of your personal utilities during your stay in the college.
+          The College will take care of your personal utilities during your stay in the college.
         </td>
       </tr>
       <tr>
@@ -138,7 +143,7 @@
         <td style="font-size: 14px; text-align: left; padding-top: 5px;" colspan="2">
           <img src="{{ asset('public/images/signature-controller.jpg') }}" width="40" height="40" alt="Signature"> <br>
           <span style="text-align: left; font-weight:bold;">Professor Md. Billal Alam</span> <br>
-          Honorary Controller of Examinations, BCPS.
+          Controller of Examinations, BCPS.
 
         </td>
       </tr>
@@ -163,7 +168,7 @@
         <td style="font-size: 14px; text-align: left; vertical-align: top; padding-top: 15px;">b) </td>
         <td style="font-size: 14px; text-align: left; vertical-align: top; padding-top: 15px;">
           Carrying Mobile Phone, Camera, Pen drive, CD and any other portable electronic devices with you into the
-          tabulation room is strictly forbidden. If you bring one please leave it to Senior Assistant Controller of
+          tabulation room is strictly forbidden. If you bring one please leave it to Deputy Controller of
           Exams before entering the specified venue.
         </td>
       </tr>

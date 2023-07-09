@@ -18,8 +18,8 @@
         In connection with the conduction of the functions of {{ $schedule->exam_type }} in FCPS Part-II
         {{ $schedule->subject_name }}, it is my great pleasure to offer you an appointment as a
         {{ $invigilator->position_name }}. For this purpose, you will be required to come to the
-        Examinations Department of the college on {{ date('d-m-Y', strtotime($schedule->exam_date)) }} at {{
-        $schedule->exam_start_time }}.
+        {{ $schedule->block_name }}, {{ $schedule->hall_name }} of the College on {{ date('d-m-Y',
+        strtotime($schedule->exam_date)) }} at {{ $schedule->exam_start_time }} AM.
       </td>
     </tr>
     <tr>
