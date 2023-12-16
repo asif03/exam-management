@@ -11,7 +11,7 @@
           </a>
         </li>
         <li class="list-divider"></li>
-        <li class="nav-small-cap"><span class="hide-menu">Examination</span></li>
+        <li class="nav-small-cap"><span class="hide-menu">Examination Scheduling</span></li>
         <li class="sidebar-item @if(Request::segment(2) == 'edit-ospe-ioe-details-schedule') selected @endif">
           <a class=" sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
             <i data-feather="file-text" class="feather-icon"></i>
@@ -40,7 +40,13 @@
             </span></a>
         </li>-->
         <li class="list-divider"></li>
-        <li class="nav-small-cap"><span class="hide-menu">Settings</span></li>
+        <li class="nav-small-cap"><span class="hide-menu">Setup</span></li>
+        <li class="sidebar-item">
+          <a class="sidebar-link sidebar-link" href="{{ route('examtypes.index') }}" aria-expanded="false">
+            <i class="icon-notebook"></i>
+            <span class="hide-menu">Exam Type Info</span>
+          </a>
+        </li>
         <li class="sidebar-item">
           <a class="sidebar-link sidebar-link" href="{{ route('mothersubjects.index') }}" aria-expanded="false">
             <i class="icon-notebook"></i>
@@ -70,6 +76,45 @@
             <i class="fas fa-sort-amount-down"></i>
             <span class="hide-menu">Invisilator's Designation</span>
           </a>
+        </li>
+
+        <li class="list-divider"></li>
+        <li class="nav-small-cap"><span class="hide-menu">User Management</span></li>
+        <li class="sidebar-item @if(Request::segment(2) == 'edit-ospe-ioe-details-schedule') selected @endif">
+          <a class=" sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+            <i data-feather="file-text" class="feather-icon"></i>
+            <span class="hide-menu">Users</span>
+          </a>
+          <ul aria-expanded="false" class="collapse first-level base-level-line">
+            <li class="sidebar-item">
+              <a href="{{ route('schedules') }}" class="sidebar-link">
+                <span class="hide-menu">Users List</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{{ route('landing-details') }}" class="sidebar-link">
+                <span class="hide-menu">Assign Role/Permission</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="sidebar-item @if(Request::segment(2) == 'edit-ospe-ioe-details-schedule') selected @endif">
+          <a class=" sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+            <i data-feather="file-text" class="feather-icon"></i>
+            <span class="hide-menu">Roles</span>
+          </a>
+          <ul aria-expanded="false" class="collapse first-level base-level-line">
+            <li class="sidebar-item">
+              <a href="{{ route('schedules') }}" class="sidebar-link">
+                <span class="hide-menu">Roles List</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{{ route('landing-details') }}" class="sidebar-link">
+                <span class="hide-menu">View Role</span>
+              </a>
+            </li>
+          </ul>
         </li>
 
         <li class="list-divider"></li>

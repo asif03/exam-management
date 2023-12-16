@@ -13,6 +13,8 @@ use App\Models\ExamScheduleRole;
 use App\Models\ExamType;
 use App\Models\MotherSubject;
 use App\Models\User;
+use App\Sms\Sms;
+use App\Traits\MenuTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -21,12 +23,14 @@ use PDF;
 
 class ExamOspeIoeController extends Controller
 {
+    use MenuTrait;
+
     public function __construct()
     {
         $this->middleware('auth');
     }
 
-    public function menus()
+    /*public function menus()
     {
         $userModel = new User();
         $userModules = $userModel->getModules(auth()->id());
@@ -36,7 +40,7 @@ class ExamOspeIoeController extends Controller
         }
 
         return $assignModules;
-    }
+    }*/
 
     public function index()
     {
@@ -49,7 +53,7 @@ class ExamOspeIoeController extends Controller
         $examtype = ExamType::where('active', true)->get();
         $examhall = ExamHall::where('active', true)->get();
 
-        $menus = $this->menus();
+        $menus = $this->getMenuAccessByUser();
 
         return view('exam.ospeioe', [
             'menus'    => $menus,
@@ -272,7 +276,7 @@ class ExamOspeIoeController extends Controller
             ->join('fellows', 'exam_schedule_details.fellow_id', '=', 'fellows.id')
             ->join('exam_schedule_roles', 'exam_schedule_details.role_id', '=', 'exam_schedule_roles.id')
             ->select('exam_schedule_details.id', 'fellows.fellow_id', 'exam_schedule_roles.position_name', 'fellows.name',
-                'fellows.office_add', 'fellows.mobile', 'fellows.e_mail', 'fellows.pnr_no')
+                'fellows.office_add', 'fellows.home_add', 'fellows.mobile', 'fellows.e_mail', 'fellows.pnr_no')
             ->get();
 
         $data['invigilators'] = $invigilators;
@@ -497,6 +501,16 @@ class ExamOspeIoeController extends Controller
         } elseif ($cntEmailSentSuccess > 0 && $cntEmailSentFailure == 0) {
             return redirect()->route('edit-ospe-ioe-details-schedule', ['id' => $id])->with('success', 'Successfully Sent Email.');
         }
+    }
+
+    public function smsInvisilatorInvitation($id, $invisilatorId)
+    {
+        $smsSent = new Sms();
+        //echo mb_convert_encoding('টেস্ট মেসেজ', 'UTF-16BE');
+        //die;
+
+        //dd($smsSent->send('01724296191', 'evsjv‡`k K‡jR Ae wdwRwkqvbm& GÛ mvR©bm& (wewmwcGm)-'));
+
     }
 
 }

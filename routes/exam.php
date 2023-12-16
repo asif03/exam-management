@@ -40,6 +40,8 @@ Route::prefix('exam')->group(function () {
     Route::get('/email-invisilator-invitation/{id}/{invId}', [ExamOspeIoeController::class, 'emailInvisilatorInvitation'])->name('email-invisilator-invitation');
     Route::get('/schedule-email-all/{id}', [ExamOspeIoeController::class, 'emailInvitaionSchedule'])->name('schedule-email-all');
 
+    Route::get('/sms-invisilator-invitation/{id}/{invId}', [ExamOspeIoeController::class, 'smsInvisilatorInvitation'])->name('sms-invisilator-invitation');
+
     Route::get('/edit-schedule-master/{id}', [ExamOspeIoeController::class, 'editScheduleMaster'])->name('edit-schedule-master');
     Route::put('/update-schedule-master/{id}', [ExamOspeIoeController::class, 'updateScheduleMaster'])->name('update-schedule-master');
 });

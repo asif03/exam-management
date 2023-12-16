@@ -117,7 +117,12 @@
           <td width="35%"
             style="border-bottom: #000 solid 1px; border-right: #000 solid 1px; font-size: 12px; text-align: left;">
             {{ $invigilator->name }}<br />
-            {{ $invigilator->office_add }} <br />
+            @if ($invigilator->office_add ==! NULL)
+            {!! nl2br(e($invigilator->office_add)) !!} <br />
+            @else
+            {!! nl2br(e($invigilator->home_add)) !!} <br />
+            @endif
+            <!--{{ $invigilator->office_add }} <br />-->
             {{ $invigilator->mobile }}
           </td>
           <td style="border-bottom: #000 solid 1px; border-right: #000 solid 1px; font-size: 12px; text-align: center;">

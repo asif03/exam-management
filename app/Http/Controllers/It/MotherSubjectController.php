@@ -6,26 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMotherSubjectRequest;
 use App\Http\Requests\UpdateMotherSubjectRequest;
 use App\Models\MotherSubject;
-use App\Models\User;
+use App\Traits\MenuTrait;
 use Illuminate\Http\Request;
 
 class MotherSubjectController extends Controller
 {
+    use MenuTrait;
+
     public function __construct()
     {
         $this->middleware('auth');
-    }
-
-    public function menus()
-    {
-        $userModel = new User();
-        $userModules = $userModel->getModules(auth()->id());
-
-        foreach ($userModules as $usrmodule) {
-            $assignModules[] = $usrmodule->module_id;
-        }
-
-        return $assignModules;
     }
 
     /**
@@ -35,7 +25,7 @@ class MotherSubjectController extends Controller
      */
     public function index()
     {
-        $menus = $this->menus();
+        $menus = $this->getMenuAccessByUser();
         $subjects = MotherSubject::orderBy('subject_name', 'asc')->get();
 
         return view('mother-subject.index', ['subjects' => $subjects, 'menus' => $menus]);
@@ -48,7 +38,7 @@ class MotherSubjectController extends Controller
      */
     public function create()
     {
-        $menus = $this->menus();
+        $menus = $this->getMenuAccessByUser();
         return view('mother-subject.create', ['menus' => $menus]);
     }
 
@@ -85,7 +75,7 @@ class MotherSubjectController extends Controller
     public function edit($id)
     {
         $motherSubject = MotherSubject::find($id);
-        $menus = $this->menus();
+        $menus = $this->getMenuAccessByUser();
         return view('mother-subject.edit', ['menus' => $menus, 'subject' => $motherSubject]);
     }
 

@@ -20,8 +20,6 @@ class CreateExamScheduleMastersTable extends Migration
             $table->unsignedBigInteger('exam_type_id');
             $table->unsignedBigInteger('mother_subject_id');
             $table->date('exam_date');
-            $table->year('exam_year', 4);
-            $table->string('exam_session', 3);
             $table->string('exam_start_time', 8);
             $table->string('exam_end_time', 8);
             $table->string('reporting_time', 8)->nullable();

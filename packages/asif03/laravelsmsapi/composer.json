@@ -1,0 +1,21 @@
+{
+    "name": "asif03/laravelsmsapi",
+    "description": "This is package for sending sms through sslcommerz to Bangladeshi mobile numbers using laravel application",
+    "type": "library",
+    "require": {
+        "guzzlehttp/guzzle": "7.7.x-dev"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Asif03\\Laravelsmsapi\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Md. Asif Iqbal",
+            "email": "babu033045@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}

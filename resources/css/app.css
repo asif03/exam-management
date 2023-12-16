@@ -1,0 +1,23 @@
+.dataTables_paginate {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.dataTables_length > label {
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 5px;
+    margin-right: 5px;
+    gap: 5px;
+}
+
+.dataTables_filter > label {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 5px;
+    margin-right: 5px;
+    gap: 5px;
+}

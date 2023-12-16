@@ -20,12 +20,13 @@ Route::get('/', function () {
 
 Auth::routes(['verify' => true]);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Route::middleware(['verified'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     require __DIR__ . '/admin.php';
     require __DIR__ . '/it.php';
     require __DIR__ . '/exam.php';
     require __DIR__ . '/rtm.php';
     require __DIR__ . '/others.php';
 });
+
+Route::get('/roles', [App\Http\Controllers\RoleController::class, 'index'])->name('roles');

@@ -40,6 +40,32 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
+  <style>
+    .dataTables_paginate {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .dataTables_length>label {
+      width: 50%;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      margin-right: 5px;
+      gap: 5px;
+    }
+
+    .dataTables_filter>label {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-top: 5px;
+      margin-right: 5px;
+      gap: 5px;
+    }
+  </style>
 </head>
 
 <body>

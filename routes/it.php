@@ -3,12 +3,16 @@
 use App\Http\Controllers\It\AlliedSubjectController;
 use App\Http\Controllers\It\ExamHallController;
 use App\Http\Controllers\It\ExamScheduleRoleController;
+use App\Http\Controllers\It\ExamTypeController;
 use App\Http\Controllers\It\ItDashboardControllr;
 use App\Http\Controllers\It\MotherSubjectController;
 use App\Http\Controllers\It\SubjectController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/it-dashboard', [ItDashboardControllr::class, 'index'])->middleware('auth')->name('it-dashboard');
+
+//Exam Types
+Route::resource('examtypes', ExamTypeController::class)->middleware(['auth']);
 
 //Mother Subject
 Route::resource('mothersubjects', MotherSubjectController::class)->middleware(['auth']);
