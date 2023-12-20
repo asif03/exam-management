@@ -13,6 +13,8 @@ Route::get('/it-dashboard', [ItDashboardControllr::class, 'index'])->middleware(
 
 //Exam Types
 Route::resource('examtypes', ExamTypeController::class)->middleware(['auth']);
+Route::put('/examtypes/{examtype}/inactive', [ExamTypeController::class, 'inactive'])->middleware(['auth'])->name('examtypes.inactive');
+Route::put('/examtypes/{examtype}/active', [ExamTypeController::class, 'active'])->middleware(['auth'])->name('examtypes.active');
 
 //Mother Subject
 Route::resource('mothersubjects', MotherSubjectController::class)->middleware(['auth']);

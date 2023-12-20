@@ -43,8 +43,8 @@
         <li class="nav-small-cap"><span class="hide-menu">Setup</span></li>
         <li class="sidebar-item">
           <a class="sidebar-link sidebar-link" href="{{ route('examtypes.index') }}" aria-expanded="false">
-            <i class="icon-notebook"></i>
-            <span class="hide-menu">Exam Type Info</span>
+            <i class='fas fa-book-open'></i>
+            <span class="hide-menu">Exam Name Info</span>
           </a>
         </li>
         <li class="sidebar-item">
@@ -80,14 +80,14 @@
 
         <li class="list-divider"></li>
         <li class="nav-small-cap"><span class="hide-menu">User Management</span></li>
-        <li class="sidebar-item @if(Request::segment(2) == 'edit-ospe-ioe-details-schedule') selected @endif">
+        <li class="sidebar-item @if(Request::segment(2) == 'users') selected @endif">
           <a class=" sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
             <i data-feather="file-text" class="feather-icon"></i>
             <span class="hide-menu">Users</span>
           </a>
           <ul aria-expanded="false" class="collapse first-level base-level-line">
             <li class="sidebar-item">
-              <a href="{{ route('schedules') }}" class="sidebar-link">
+              <a href="{{ route('users') }}" class="sidebar-link">
                 <span class="hide-menu">Users List</span>
               </a>
             </li>

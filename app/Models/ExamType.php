@@ -21,5 +21,5 @@ class ExamType extends Model
      *
      * @var array
      */
-    protected $fillable = ['exam_type'];
+    protected $fillable = ['exam_type', 'active'];
 }

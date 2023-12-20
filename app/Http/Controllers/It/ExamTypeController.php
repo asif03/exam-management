@@ -71,7 +71,9 @@ class ExamTypeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $examType = ExamType::find($id);
+        $menus = $this->getMenuAccessByUser();
+        return view('exam-types.edit', ['menus' => $menus, 'examType' => $examType]);
     }
 
     /**
@@ -83,7 +85,10 @@ class ExamTypeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $examType = ExamType::findOrFail($id);
+        $examType->update($request->all());
+
+        return redirect()->back()->with('success', 'Data updated successfully.');
     }
 
     /**
@@ -95,5 +100,31 @@ class ExamTypeController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Update the specified resource from storage.
+     *
+     * @param  \App\Models\Bank  $bank
+     * @return \Illuminate\Http\Response
+     */
+    public function active(ExamType $examType, $id)
+    {
+        $examType = ExamType::findOrFail($id);
+        $examType->update(['active' => true]);
+        return redirect()->back()->with('success', 'Exam Type activated successfully.');
+    }
+
+    /**
+     * Update the specified resource from storage.
+     *
+     * @param  \App\Models\Bank  $bank
+     * @return \Illuminate\Http\Response
+     */
+    public function inactive(ExamType $examType, $id)
+    {
+        $examType = ExamType::findOrFail($id);
+        $examType->update(['active' => false]);
+        return redirect()->back()->with('success', 'Exam Type deleted successfully.');
     }
 }

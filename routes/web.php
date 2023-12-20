@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,6 +28,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     require __DIR__ . '/exam.php';
     require __DIR__ . '/rtm.php';
     require __DIR__ . '/others.php';
+
+    //User Management
+    Route::prefix('user-management')->group(function () {
+        Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('users');
+        Route::put('/users/{user}/inactive', [UserController::class, 'inactive'])->name('user.inactive');
+        Route::put('/users/{user}/active', [UserController::class, 'active'])->name('user.active');
+    });
 });
 
 Route::get('/roles', [App\Http\Controllers\RoleController::class, 'index'])->name('roles');

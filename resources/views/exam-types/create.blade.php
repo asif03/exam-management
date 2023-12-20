@@ -40,7 +40,7 @@
           <form action="{{ route('examtypes.store') }}" method="POST">
             @csrf
             <div class="row mb-3">
-              <label for="examType" class="col-sm-4 col-form-label">Exam Type Name<span>*</span></label>
+              <label for="examType" class="col-sm-4 col-form-label">Exam Name<span>*</span></label>
               <div class="col-sm-8">
                 <input type="text" class="form-control" id="exam_type" name="exam_type" required>
               </div>

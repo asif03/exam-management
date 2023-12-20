@@ -16368,7 +16368,7 @@ fieldset:disabled .btn {
 *******************/
 .left-part {
     height: 100%;
-    width: 260px;
+    width: 300px;
     position: absolute;
     border-right: 1px solid #edf2f9;
 }
@@ -16384,10 +16384,10 @@ fieldset:disabled .btn {
 }
 
 .right-part {
-    width: calc(100% - 260px);
+    width: calc(100% - 300px);
     min-height: calc(100vh - 64px);
     overflow: auto;
-    margin-left: 260px;
+    margin-left: 300px;
 }
 
 .reverse-mode .left-part {
@@ -16400,7 +16400,7 @@ fieldset:disabled .btn {
 }
 .reverse-mode .right-part {
     margin-left: 0px;
-    margin-right: 260px;
+    margin-right: 300px;
 }
 
 /*******************
@@ -16417,7 +16417,7 @@ fieldset:disabled .btn {
     transition: 0.2s ease-in;
 }
 #main-wrapper[data-layout="vertical"][data-sidebartype="full"] .page-wrapper {
-    margin-left: 260px;
+    margin-left: 300px;
 }
 #main-wrapper[data-layout="vertical"][data-sidebar-position="fixed"]
     .topbar
@@ -16462,13 +16462,13 @@ fieldset:disabled .btn {
         .topbar
         .top-navbar
         .navbar-header {
-        width: 260px;
+        width: 300px;
     }
     #main-wrapper[data-layout="vertical"][data-sidebar-position="fixed"][data-sidebartype="full"]
         .topbar
         .top-navbar
         .navbar-collapse {
-        margin-left: 260px;
+        margin-left: 300px;
     }
     #main-wrapper[data-layout="vertical"][data-sidebar-position="fixed"][data-sidebartype="mini-sidebar"]
         .topbar
@@ -16482,7 +16482,7 @@ fieldset:disabled .btn {
         /*Header position*/
     }
     #main-wrapper[data-sidebartype="mini-sidebar"] .left-sidebar {
-        left: -260px;
+        left: -300px;
     }
     #main-wrapper.show-sidebar .left-sidebar {
         left: 0;
@@ -16504,7 +16504,7 @@ fieldset:disabled .btn {
     }
 
     .left-part {
-        left: -260px;
+        left: -300px;
         background: #f9fbfd;
         z-index: 1;
         position: fixed;
@@ -16515,7 +16515,7 @@ fieldset:disabled .btn {
     }
 
     .reverse-mode .left-part {
-        right: -260px;
+        right: -300px;
         left: auto;
     }
     .reverse-mode .left-part.show-panel {
@@ -16747,7 +16747,7 @@ Main sidebar
 ******************/
 .left-sidebar {
     position: absolute;
-    width: 260px;
+    width: 300px;
     height: 100%;
     top: 0px;
     z-index: 10;

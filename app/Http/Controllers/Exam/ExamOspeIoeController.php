@@ -12,7 +12,6 @@ use App\Models\ExamScheduleMaster;
 use App\Models\ExamScheduleRole;
 use App\Models\ExamType;
 use App\Models\MotherSubject;
-use App\Models\User;
 use App\Sms\Sms;
 use App\Traits\MenuTrait;
 use Illuminate\Http\Request;
@@ -32,14 +31,14 @@ class ExamOspeIoeController extends Controller
 
     /*public function menus()
     {
-        $userModel = new User();
-        $userModules = $userModel->getModules(auth()->id());
+    $userModel = new User();
+    $userModules = $userModel->getModules(auth()->id());
 
-        foreach ($userModules as $usrmodule) {
-            $assignModules[] = $usrmodule->module_id;
-        }
+    foreach ($userModules as $usrmodule) {
+    $assignModules[] = $usrmodule->module_id;
+    }
 
-        return $assignModules;
+    return $assignModules;
     }*/
 
     public function index()
@@ -153,7 +152,7 @@ class ExamOspeIoeController extends Controller
 
     public function showOspeIoeSlaveLandingPage()
     {
-        $menus = $this->menus();
+        $menus = $this->getMenuAccessByUser();
 
         $subjects = MotherSubject::where('active', true)->get();
         $schedule_role = ExamScheduleRole::where('active', true)->get();
@@ -174,7 +173,7 @@ class ExamOspeIoeController extends Controller
 
     public function reports()
     {
-        $menus = $this->menus();
+        $menus = $this->getMenuAccessByUser();
         $examtype = ExamType::where('active', true)->get();
         $subjects = MotherSubject::where('active', true)->get();
         return view('exam.ospe-ioe-reports', ['menus' => $menus, 'examtype' => $examtype, 'subjects' => $subjects]);
@@ -292,7 +291,7 @@ class ExamOspeIoeController extends Controller
 
     public function editDetailsSchedule($id)
     {
-        $menus = $this->menus();
+        $menus = $this->getMenuAccessByUser();
         $data['id'] = $id;
 
         $scheduleInfo = DB::table('exam_schedule_masters')
