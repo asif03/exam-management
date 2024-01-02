@@ -98,4 +98,41 @@ class Sms
         }
     }
 
+    function sentMultiple($recipients, $messages)
+    {
+        $url = $this->url;
+        $smsString = 'user=' . $this->user . '&pass=' . $this->password;
+        $smsSl = 0;
+
+        foreach ($recipients as $recipient) {
+            if ($smsSl != count($recipients) - 1) {
+                $smsString .= '&sms[' . $smsSl . '][0]=' . $recipient . '&sms[' . $smsSl . '][1]=' . urlencode($messages[$smsSl])
+                . '&sms[' . $smsSl . '][2]=' . random_int(1, 99999999);
+            } else {
+                $smsString .= '&sms[' . $smsSl . '][0]=' . $recipient . '&sms[' . $smsSl . '][1]=' . urlencode($messages[$smsSl])
+                . '&sms[' . $smsSl . '][2]=' . random_int(1, 99999999) . '&';
+            }
+
+            $smsSl++;
+        }
+
+        $smsString .= 'sid=' . $this->sid;
+
+        $crl = curl_init();
+        curl_setopt($crl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($crl, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($crl, CURLOPT_URL, $url);
+        curl_setopt($crl, CURLOPT_HEADER, 0);
+        curl_setopt($crl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($crl, CURLOPT_POST, 1);
+        curl_setopt($crl, CURLOPT_POSTFIELDS, $smsString);
+
+        $response = curl_exec($crl);
+
+        dd($response);
+
+        curl_close($crl);
+
+    }
+
 }

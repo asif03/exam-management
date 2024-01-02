@@ -7,7 +7,7 @@
 <div class="page-breadcrumb">
   <div class="row">
     <div class="col-7 align-self-center">
-      <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">OSPE/OSCE/IOE Scheduler</h4>
+      <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">EXAMINATION SCHEDULING</h4>
       <div class="d-flex align-items-center">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb m-0 p-0">
@@ -64,7 +64,7 @@
 
   <script>
     $(document).ready(function() {
-      $('#myscheduleInfoTableTable').DataTable({});
+      
       getListFn();
     });
 
@@ -93,9 +93,9 @@
             {
               "data": function(data) {
                 if(data.active === 1) {
-                  return '<i class="fa fa-circle text-success font-12" data-bs-toggle="tooltip" data-placement="top" title="Active"></i>';
+                  return '<span class="badge rounded-pill text-bg-success">Active</span>';
                 } else {
-                  return '<i class="fa fa-circle text-danger font-12" data-bs-toggle="tooltip" data-placement="top" title="In Active"></i>';
+                  return '<span class="badge rounded-pill text-bg-danger">In-active</span>';
                 }
               }
             },
@@ -103,7 +103,16 @@
               "data": function(data, type, row, meta) {
                 urie = "{{ route('edit-schedule-master','lid')}}";
                 urie = urie.replace('lid', data.id);
-                return '<a href="' + urie + '" class = "editor-edit"><i class="fas fa-edit"></i></a>';
+
+                //urid = "{{ route('delete-schedule-master','lidel')}}";
+                //urid = urid.replace('lidel', data.id);
+                if(data.active === 1) {
+                  return '<a href="' + urie + '" ><i class="fas fa-edit"></i></a> '
+                    + '<button class="btn-sm btn btn-danger btn-rounded" onclick="delSchedule(' + data.id + ')"><i class="fa fa-trash" aria-hidden="true"></i></button>';
+                } else {
+                  return '<button class="btn-sm btn btn-success btn-rounded" onclick="activeSchedule(' + data.id + ')"><i class="fa fa-check" aria-hidden="true"></i> Activate</a></button>';
+                }
+                
               },
               "className": "text-indigo-600 hover:text-indigo-900",
               "orderable": false,
@@ -119,12 +128,44 @@
               return data == '0' ? 'No' : 'Yes';
             },
           }
-          ]
+          ],
+          "order" : [[0, 'desc']]
         });
       }
     });
     
     dataTab.destroy();
+  }
+
+  function delSchedule(scheduleId) {
+
+    alert(scheduleId);
+
+    $.ajax({
+        url: "{{URL::to('/exam/delete-schedule-master/') }}"+ scheduleId,
+        type: "POST",
+        data: {
+            scheduleId: scheduleId,
+            _token: _token
+        },
+        success: function (response) {
+          alert(response)
+            if (response) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Data saved successfully!'
+                });
+            }
+        },
+        error: function (error) {
+            alert(error);
+        }
+    });
+    
+  }
+
+  function activeSchedule(scheduleId) {
+    alert(scheduleId);
   }
   </script>
 </div>

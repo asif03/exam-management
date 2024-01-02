@@ -104,11 +104,12 @@ class ExamScheduleRoleController extends Controller
     /**
      * Update the specified resource from storage.
      *
-     * @param  \App\Models\ExamHall $examHall
+     * @param  \App\Models\ExamScheduleRole $examScheduleRole
      * @return \Illuminate\Http\Response
      */
-    public function active(ExamScheduleRole $examScheduleRole)
+    public function active(ExamScheduleRole $examScheduleRole, $id)
     {
+        $examScheduleRole = ExamScheduleRole::findOrFail($id);
         $examScheduleRole->update(['active' => true]);
         return redirect()->back()->with('success', 'Position activated successfully.');
     }
@@ -116,13 +117,13 @@ class ExamScheduleRoleController extends Controller
     /**
      * Update the specified resource from storage.
      *
-     * @param  \App\Models\ExamHall $examHall
+     * @param  \App\Models\ExamScheduleRole $examScheduleRole
      * @return \Illuminate\Http\Response
      */
-    public function inactive(ExamScheduleRole $examScheduleRole)
+    public function inactive(ExamScheduleRole $examScheduleRole, $id)
     {
-
+        $examScheduleRole = ExamScheduleRole::findOrFail($id);
         $examScheduleRole->update(['active' => false]);
-        return redirect()->back()->with('success', 'Position deactivated successfully.');
+        return redirect()->back()->with('success', 'Position deleted successfully.');
     }
 }

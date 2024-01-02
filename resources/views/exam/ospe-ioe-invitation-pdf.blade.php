@@ -109,7 +109,7 @@
       </tr>
       <tr>
         <td colspan="2" style="font-size: 14px; text-align: left; padding-top: 5px;">
-          In connection with the conduction of the functions of {{ $schedule->exam_type }} in FCPS Part-II
+          In connection with the conduction of the functions of {{ $schedule->exam_type }} in
           {{ $schedule->subject_name }}, it is my great pleasure to offer you an appointment as a
           {{ $invigilator->position_name }}. For this purpose, you will be required to come to the
           {{ $schedule->block_name }}, {{ $schedule->hall_name }}

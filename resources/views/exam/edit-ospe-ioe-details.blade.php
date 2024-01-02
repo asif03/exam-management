@@ -32,20 +32,12 @@
       <div class="card">
         <div class="card-body">
           <div class="row">
-            <div class="col-6">
+            <div class="col-12">
               <h5 class="card-title">Edit invigilators :: {{
                 $data['schedule']->exam_type }}
                 EXAM, {{
                 $data['schedule']->exam_session }} {{ $data['schedule']->exam_year }}
               </h5>
-            </div>
-            <div class="col-6 d-flex justify-content-end">
-              <a class="btn btn-primary btn-sm" href="{{ route('schedule-download', $data['schedule']->id ) }}">Download
-                Schedule</a> |
-              <a class="btn btn-primary btn-sm" href="{{ route('schedule-email-all', $data['schedule']->id ) }}">Email
-                Sent
-                to All
-              </a>
             </div>
           </div>
 
@@ -83,8 +75,23 @@
               </tr>
             </table>
           </div>
-
-          <h5 class="card-title mt-2 text-info">List of Schedules of Selected Subject:</h5>
+          <div class="row m-1">
+            <div class="col-6 d-flex justify-content-start">
+              <h5 class="card-title text-info">List of Schedules of Selected Subject:</h5>
+            </div>
+            <div class="col-6 d-flex justify-content-end">
+              <a class="btn btn-primary btn-sm" href="{{ route('schedule-download', $data['schedule']->id ) }}">Download
+                Schedule</a> |
+              <a class="btn btn-primary btn-sm" href="{{ route('schedule-email-all', $data['schedule']->id ) }}">Email
+                Sent
+                to All
+              </a>|
+              <a class="btn btn-primary btn-sm" href="{{ route('schedule-sms-all', $data['schedule']->id ) }}">SMS
+                Sent
+                to All
+              </a>
+            </div>
+          </div>
           <x-alert />
           <div class="row">
             <div class="col">
@@ -135,7 +142,7 @@
                           <button class="btn btn-danger btn-sm"
                             onclick="event.preventDefault();document.getElementById('form-delete-{{ $invigilator->id }}').submit()">
                             <i class="fa fa-trash" aria-hidden="true"></i>
-                          </button> |
+                          </button>&nbsp;|&nbsp;
                           <form class="hidden" id="{{'form-delete-'.$invigilator->id}}"
                             action="{{ route('delete-invisilator', $invigilator->id) }}" method="POST">
                             @csrf
@@ -155,9 +162,14 @@
                           <a href="{{route('download-invisilator-invitation', $invigilator->id)}}"
                             class="btn btn-info btn-sm">
                             <i class="fas fa-file-pdf fa-lg"></i>
-                          </a> |
+                          </a>&nbsp;|&nbsp;
                           <a href="{{route('email-invisilator-invitation', [$data['schedule']->id, $invigilator->id])}}"
-                            class="btn btn-info btn-sm"><i class="fa fa-envelope-square fa-lg" aria-hidden="true"></i>
+                            class="btn btn-warning waves-effect waves-light btn-sm"><span class="btn-label"><i
+                                class="far fa-envelope"></i></span>Mail
+                          </a>&nbsp;|&nbsp;
+                          <a href="{{route('sms-invisilator-invitation', [$data['schedule']->id, $invigilator->id])}}"
+                            class="btn btn-warning waves-effect waves-light btn-sm"><span class="btn-label"><i
+                                class="fas fa-mobile-alt"></i></span>sms
                           </a>
                         </td>
                       </tr>

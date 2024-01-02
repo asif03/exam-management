@@ -36,13 +36,14 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Schedule List</h5>
+          <x-alert />
           <div class="table-responsive">
             <table id="listposition" class="table border table-striped table-bordered text-nowrap">
               <thead>
                 <tr>
                   <th>Position Name</th>
                   <th>Remarks</th>
-                  <th>Is Active?</th>
+                  <th>Active?</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -53,18 +54,16 @@
                   <td>{{ $role->description }}</td>
                   <td>
                     @if($role->active==1)
-                    <i class="fa fa-circle text-success font-12" data-bs-toggle="tooltip" data-placement="top"
-                      title="Active"></i>
+                    <span class="badge rounded-pill text-bg-success">Active</span>
                     @else
-                    <i class="fa fa-circle text-danger font-12" data-bs-toggle="tooltip" data-placement="top"
-                      title="In Active"></i>
+                    <span class="badge rounded-pill text-bg-danger">In-active</span>
                     @endif
                   </td>
                   <td>
-                    <a class="btn btn-primary btn-sm" href="{{ route('exam-schedule-roles.edit', $role->id) }}">
+                    <a class="btn btn-sm" href="{{ route('exam-schedule-roles.edit', $role->id) }}">
                       <i class="fas fa-edit"></i></a>
                     @if($role->active==1)
-                    <button class="btn btn-danger btn-sm"
+                    <button class="btn btn-sm"
                       onclick="event.preventDefault();document.getElementById('form-inactive-{{ $role->id }}').submit()">
                       <i class="fa fa-trash" aria-hidden="true"></i>
                     </button>
@@ -74,9 +73,9 @@
                       @method('PUT')
                     </form>
                     @else
-                    <button class="btn btn-success btn-sm"
+                    <button class="btn btn-sm btn-primary btn-rounded"
                       onclick="event.preventDefault();document.getElementById('form-active-{{ $role->id }}').submit()">
-                      <i class="fa fa-check" aria-hidden="true"></i></button>
+                      <i class="fa fa-check" aria-hidden="true"></i>Activate</button>
                     <form class="hidden" id="{{'form-active-'.$role->id}}"
                       action="{{ route('exam-schedule-role.active', $role->id) }}" method="POST">
                       @csrf

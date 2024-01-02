@@ -14,13 +14,13 @@
         <li class="nav-small-cap"><span class="hide-menu">Examination Scheduling</span></li>
         <li class="sidebar-item @if(Request::segment(2) == 'edit-ospe-ioe-details-schedule') selected @endif">
           <a class=" sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-            <i data-feather="file-text" class="feather-icon"></i>
-            <span class="hide-menu">OSPE/OSCE/IOE</span>
+            <i class="fas fa-random"></i>
+            <span class="hide-menu">Schedules</span>
           </a>
           <ul aria-expanded="false" class="collapse first-level base-level-line">
             <li class="sidebar-item">
               <a href="{{ route('schedules') }}" class="sidebar-link">
-                <span class="hide-menu">Schedules</span>
+                <span class="hide-menu">Schedule Info</span>
               </a>
             </li>
             <li class="sidebar-item">
@@ -43,25 +43,25 @@
         <li class="nav-small-cap"><span class="hide-menu">Setup</span></li>
         <li class="sidebar-item">
           <a class="sidebar-link sidebar-link" href="{{ route('examtypes.index') }}" aria-expanded="false">
-            <i class='fas fa-book-open'></i>
-            <span class="hide-menu">Exam Name Info</span>
+            <i class="fas fa-clipboard"></i>
+            <span class="hide-menu">Exam Name</span>
           </a>
         </li>
         <li class="sidebar-item">
           <a class="sidebar-link sidebar-link" href="{{ route('mothersubjects.index') }}" aria-expanded="false">
-            <i class="icon-notebook"></i>
+            <i class="fas fa-book"></i>
             <span class="hide-menu">Mother Subject Info</span>
           </a>
         </li>
         <li class="sidebar-item">
           <a class="sidebar-link sidebar-link" href="{{ route('subjects.index') }}" aria-expanded="false">
-            <i class="icon-notebook"></i>
+            <i class="fas fa-book"></i>
             <span class="hide-menu">Subject Info</span>
           </a>
         </li>
         <li class="sidebar-item">
           <a class="sidebar-link sidebar-link" href="{{ route('allied-subjects.index') }}" aria-expanded="false">
-            <i class="icon-notebook"></i>
+            <i class="fas fa-link"></i>
             <span class="hide-menu">Allied Subject Info</span>
           </a>
         </li>
@@ -71,13 +71,30 @@
             <span class="hide-menu">Hall Info</span>
           </a>
         </li>
-        <li class="sidebar-item">
-          <a class="sidebar-link sidebar-link" href="{{ route('exam-schedule-roles.index') }}" aria-expanded="false">
-            <i class="fas fa-sort-amount-down"></i>
-            <span class="hide-menu">Invisilator's Designation</span>
-          </a>
-        </li>
 
+        <li class="sidebar-item @if(Request::segment(2) == 'invisilators') selected @endif">
+          <a class=" sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+            <i class="fas fa-user-md"></i>
+            <span class="hide-menu">Invisilator Settings</span>
+          </a>
+          <ul aria-expanded="false" class="collapse first-level base-level-line">
+            <li class="sidebar-item">
+              <a href="{{ route('exam-schedule-roles.index') }}" class="sidebar-link">
+                <span class="hide-menu">Designation</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{{ route('fellows.index') }}" class="sidebar-link">
+                <span class="hide-menu">Fellows</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{{ route('landing-details') }}" class="sidebar-link">
+                <span class="hide-menu">Non Fellows</span>
+              </a>
+            </li>
+          </ul>
+        </li>
         <li class="list-divider"></li>
         <li class="nav-small-cap"><span class="hide-menu">User Management</span></li>
         <li class="sidebar-item @if(Request::segment(2) == 'users') selected @endif">
