@@ -128,11 +128,9 @@ class Sms
         curl_setopt($crl, CURLOPT_POSTFIELDS, $smsString);
 
         $response = curl_exec($crl);
-
-        dd($response);
-
         curl_close($crl);
 
+        return $response;
     }
 
 }

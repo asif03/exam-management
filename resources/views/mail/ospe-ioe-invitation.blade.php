@@ -19,7 +19,7 @@
         {{ $schedule->subject_name }}, it is my great pleasure to offer you an appointment as a
         {{ $invigilator->position_name }}. For this purpose, you will be required to come to the
         {{ $schedule->block_name }}, {{ $schedule->hall_name }} of the College on {{ date('d-m-Y',
-        strtotime($schedule->exam_date)) }} at {{ $schedule->exam_start_time }} AM.
+        strtotime($schedule->exam_date)) }} at {{ date('h:i a', strtotime($schedule->exam_start_time)) }}.
       </td>
     </tr>
     <tr>
@@ -47,7 +47,7 @@
     <tr>
       <td style="font-size: 14px; text-align: left; padding-top: 5px;" colspan="2">
         <span style="text-align: left; font-weight:bold;">Professor Md. Billal Alam</span> <br>
-        Honorary Controller of Examinations, BCPS.
+        Controller of Examinations, BCPS.
       </td>
     </tr>
   </table>

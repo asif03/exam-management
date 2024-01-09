@@ -80,14 +80,15 @@
               <h5 class="card-title text-info">List of Schedules of Selected Subject:</h5>
             </div>
             <div class="col-6 d-flex justify-content-end">
-              <a class="btn btn-primary btn-sm" href="{{ route('schedule-download', $data['schedule']->id ) }}">Download
-                Schedule</a> |
-              <a class="btn btn-primary btn-sm" href="{{ route('schedule-email-all', $data['schedule']->id ) }}">Email
-                Sent
+              <a class="btn btn-primary btn-sm btn-rounded"
+                href="{{ route('schedule-download', $data['schedule']->id ) }}"><i class="fas fa-download"></i>
+                Schedule</a> &nbsp;
+              <a class="btn btn-info btn-sm btn-rounded"
+                href="{{ route('schedule-email-all', $data['schedule']->id ) }}"><i class="far fa-envelope"></i> Email
                 to All
-              </a>|
-              <a class="btn btn-primary btn-sm" href="{{ route('schedule-sms-all', $data['schedule']->id ) }}">SMS
-                Sent
+              </a> &nbsp;
+              <a class="btn btn-warning btn-sm btn-rounded text-white"
+                href="{{ route('schedule-sms-all', $data['schedule']->id ) }}"><i class="fas fa-mobile-alt"></i> SMS
                 to All
               </a>
             </div>
@@ -101,20 +102,20 @@
                     style="width: 100%;">
                     <thead>
                       <tr>
-                        <td>SL.</td>
-                        <td>Position</td>
-                        <td>Name & Address</td>
-                        <td>Fellow ID/PRN</td>
-                        <td>Email</td>
-                        <td>Mobile</td>
-                        <td>Action</td>
+                        <th>SL.</th>
+                        <th width="15%">Position</th>
+                        <th width="25%">Name & Address</th>
+                        <th width="10%">Fellow ID/PRN</th>
+                        <th>Email / Sent?</th>
+                        <th>Mobile / Sent?</th>
+                        <th>Action</th>
                       </tr>
                     </thead>
                     <tbody class="fs-6">
                       @foreach($data['invigilators'] as $invigilator)
                       <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>
+                        <td width="15%">
                           <select class="form-select" name="position_name" id="position_name"
                             onchange="changeInvisilatorRole(this.value, {{ $invigilator->id }})">
                             <option value="">Select</option>
@@ -126,32 +127,48 @@
                             @endforeach
                           </select>
                         </td>
-                        <td>
+                        <td width="25%">
                           <b>{{ $invigilator->name }}</b> <br />
                           {{ $invigilator->office_add }}
                         </td>
-                        <td>@if ($invigilator->pnr_no == '')
+                        <td width="10%">@if ($invigilator->pnr_no == '')
                           {{ $invigilator->fellow_id }}
                           @else
                           {{ $invigilator->pnr_no }}
                           @endif
                         </td>
-                        <td>{{ $invigilator->e_mail }}</td>
-                        <td>{{ $invigilator->mobile }}</td>
-                        <td class="d-flex flex-row">
-                          <button class="btn btn-danger btn-sm"
+                        <td align="center">
+                          {{ $invigilator->e_mail }}
+                          <br>
+                          @if ($invigilator->email_sent == 'Y')
+                          <span class="badge rounded-pill text-bg-success">Sent</span>
+                          @elseif($invigilator->email_sent == 'N')
+                          <span class="badge rounded-pill text-bg-danger">Not Send Yet</span>
+                          @endif
+                        </td>
+                        <td align="center">
+                          {{ $invigilator->mobile }}
+                          <br>
+                          @if ($invigilator->sms_sent == 'Y')
+                          <span class="badge rounded-pill text-bg-success">Sent</span>
+                          @elseif($invigilator->sms_sent == 'N')
+                          <span class="badge rounded-pill text-bg-danger">Not Send Yet</span>
+                          @endif
+                        </td>
+                        <td class="d-flex flex-row justify-content-between align-items-center">
+                          <button class="btn-sm btn btn-danger btn-rounded"
                             onclick="event.preventDefault();document.getElementById('form-delete-{{ $invigilator->id }}').submit()">
                             <i class="fa fa-trash" aria-hidden="true"></i>
-                          </button>&nbsp;|&nbsp;
+                          </button>&nbsp;
                           <form class="hidden" id="{{'form-delete-'.$invigilator->id}}"
                             action="{{ route('delete-invisilator', $invigilator->id) }}" method="POST">
                             @csrf
                             @method('DELETE')
                           </form>
-                          <button class="btn btn-info btn-sm"
+                          <button class="btn btn-secondary btn-sm btn-rounded"
                             onclick="event.preventDefault();document.getElementById('form-update-{{ $invigilator->id }}').submit()">
-                            <i class="fa fa-save fa-lg" aria-hidden="true"></i>
-                          </button> |
+                            <i class="fa fa-save fa-lg" aria-hidden="true"></i> Update
+                          </button>&nbsp;
                           <form class="hidden" id="{{'form-update-'.$invigilator->id}}"
                             action="{{ route('update-invisilator', $invigilator->id) }}" method="POST">
                             @csrf
@@ -160,17 +177,13 @@
                               id="invisilator_role_{{$invigilator->id}}" value="{{ $invigilator->role_id }}">
                           </form>
                           <a href="{{route('download-invisilator-invitation', $invigilator->id)}}"
-                            class="btn btn-info btn-sm">
-                            <i class="fas fa-file-pdf fa-lg"></i>
-                          </a>&nbsp;|&nbsp;
+                            class="btn btn-info btn-sm btn-rounded"><i class="fas fa-download"></i> pdf
+                          </a>&nbsp;
                           <a href="{{route('email-invisilator-invitation', [$data['schedule']->id, $invigilator->id])}}"
-                            class="btn btn-warning waves-effect waves-light btn-sm"><span class="btn-label"><i
-                                class="far fa-envelope"></i></span>Mail
-                          </a>&nbsp;|&nbsp;
+                            class="btn-sm btn btn-warning btn-rounded text-white"><i class="far fa-envelope"></i>
+                          </a>&nbsp;
                           <a href="{{route('sms-invisilator-invitation', [$data['schedule']->id, $invigilator->id])}}"
-                            class="btn btn-warning waves-effect waves-light btn-sm"><span class="btn-label"><i
-                                class="fas fa-mobile-alt"></i></span>sms
-                          </a>
+                            class="btn-sm btn btn-warning btn-rounded text-white"><i class="fas fa-mobile-alt"></i></a>
                         </td>
                       </tr>
                       @endforeach

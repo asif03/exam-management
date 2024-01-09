@@ -90,7 +90,7 @@
       </tr>
       <tr>
         @if ($invigilator->office_add ==! NULL)
-        <td style="font-size: 14px; text-align: left; width: 35%;">{!! nl2br(e($invigilator->office_add)) !!} Asif</td>
+        <td style="font-size: 14px; text-align: left; width: 35%;">{!! nl2br(e($invigilator->office_add)) !!} </td>
         @else
         <td style="font-size: 14px; text-align: left; width: 35%;">{!! nl2br(e($invigilator->home_add)) !!}</td>
         @endif
@@ -113,8 +113,8 @@
           {{ $schedule->subject_name }}, it is my great pleasure to offer you an appointment as a
           {{ $invigilator->position_name }}. For this purpose, you will be required to come to the
           {{ $schedule->block_name }}, {{ $schedule->hall_name }}
-          of the College on {{ date('d-m-Y', strtotime($schedule->exam_date)) }} at {{
-          $schedule->exam_start_time }} AM.
+          of the College on {{ date('d-m-Y', strtotime($schedule->exam_date)) }} at {{ date('h:i a',
+          strtotime($schedule->exam_start_time)) }}.
         </td>
       </tr>
       <tr>
