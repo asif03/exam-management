@@ -5,7 +5,8 @@
 <div class="container">
   <h5 class="text-center p-1" style="border:2px solid DodgerBlue; background-color:powderblue;">Training Institute
     Information Update Form(Edit Form)</h5>
-  <form id="xm-info-updt" action="" method="POST" data-toggle="validator" role="form">
+  <form id="xm-info-updt" action="{{ route('exam-info-edit', $examInfo->id) }}" method="POST" data-toggle="validator"
+    role="form">
     @csrf
 
     <x-alert />

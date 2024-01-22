@@ -82,6 +82,23 @@ class ExamInfoUpdateController extends Controller
 
     public function edit($id)
     {
+        echo $id;
+        die;
+        $menus = $this->menus();
+        $subjects = Subject::where('active', true)->get();
+        $institutes = TrainingInstitute::where('active', true)->get();
+
+        return view('exam.edit-exam-info-update', [
+            'examInfo'   => ExamInfoUpdate::findOrFail($id),
+            'subjects'   => $subjects,
+            'institutes' => $institutes,
+            'menus'      => $menus,
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        dd($request->all());
         $menus = $this->menus();
         $subjects = Subject::where('active', true)->get();
         $institutes = TrainingInstitute::where('active', true)->get();

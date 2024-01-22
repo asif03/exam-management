@@ -37,20 +37,37 @@
       <div class="card">
         <div class="card-body">
           <h4 class="card-title">Upload Fellow File</h4>
-          <h6 class="card-subtitle">Must use <code>xlsx</code>
-          </h6>
-          <form class="mt-3">
-            @csrf
-            <div class="row mb-3">
-              <div class="col">
-                <input class="form-control" type="file" id="formFile" required>
-              </div>
+          <h6 class="card-subtitle">Must use <code>xlsx</code></h6>
+          <div class="md:grid md:grid-cols-3 md:gap-6">
+            <div class="md:col-span-1">
+              <p class="text-sm font-bold text-primary">Excel Must Contains the following fields with same headings
+                bellow:
+              </p>
+              <ul class="text-sm list-disc ml-5">
+                <li>1st Column: fellow_id</li>
+                <li>2nd Column: fellow_name</li>
+                <li>3rd Column: Cheque No</li>
+                <li>4th Column: Voucher No</li>
+                <li>5th Column: Date</li>
+                <li>6th Column: Debit</li>
+                <li>7th Column: Credit</li>
+              </ul>
+              <p class="text-sm font-bold text-primary">N.B: No other Column(s)/Extra Sheets contains in Excel.</p>
             </div>
-            <button type="submit" class="btn btn-primary">Save</button>
-          </form>
+            <div class="md:col-span-2">
+              <form class="mt-3" action="{{ route('import-fellows') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="row mb-3">
+                  <div class="col">
+                    <input class="form-control" type="file" id="fellowExcelFile" name="fellowExcelFile" required>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-@endsection
+  @endsection

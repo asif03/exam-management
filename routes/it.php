@@ -49,5 +49,6 @@ Route::middleware(['auth'])->group(function () {
 
         Route::resource('fellows', FellowController::class);
         Route::get('/upload-fellows', [FellowController::class, 'uploadFellows'])->name('upload-fellows');
+        Route::post('/import-fellows', [FellowController::class, 'importFellows'])->name('import-fellows');
     });
 });

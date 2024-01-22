@@ -47,7 +47,7 @@
                                     </option>
                                     @endforeach
                                 </select>
-                                <label for="mother_subject_id">Mother Subject</label>
+                                <label for="mother_subject_id">Subject</label>
                             </div>
                         </div>
                     </div>
@@ -124,7 +124,7 @@
                                 {
                                     "data": function (data, type, row, meta) {
                                         urie = "";
-                                        return '<button class = "btn btn-sm" onclick="viewDetails(' + data.id + ',' + data.fellow_id + ')" ><i class="fas fa-eye"></i></button>  ';
+                                        return '<button class = "btn btn-sm" onclick="viewDetails(' + data.id + ',' + data.fellow_id + ')" ><i class="fas fa-eye"></i></button>';
                                     },
                                     "className": "text-indigo-600 hover:text-indigo-900",
                                     "orderable": false,
