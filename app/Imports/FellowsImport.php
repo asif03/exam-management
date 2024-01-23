@@ -23,7 +23,7 @@ class FellowsImport implements ToModel, WithHeadingRow, WithBatchInserts, WithUp
             'fellow_name'      => $row['fellow_name'],
             'fellow_type_id'   => $row['fellow_type_id'],
             'subject_id_pgsql' => $row['subject_id'],
-            'fellowship_date'  => $row['fellowship_date'],
+            'fellowship_date'  => date('Y-m-d', strtotime($row['fellowship_date'])),
             'home_address'     => $row['home_address'],
             'office_address'   => $row['office_address'],
             'email'            => $row['email'],
@@ -49,6 +49,15 @@ class FellowsImport implements ToModel, WithHeadingRow, WithBatchInserts, WithUp
     public function uniqueBy()
     {
         return 'fellow_id';
+    }
+
+    public function transformDate($value, $format = 'Y-m-d')
+    {
+        try {
+            return \Carbon\Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($value));
+        } catch (\ErrorException $e) {
+            return \Carbon\Carbon::createFromFormat($format, $value);
+        }
     }
 
     /*public function collection(Collection $rows)
