@@ -47,7 +47,11 @@
                                     </option>
                                     @endforeach
                                 </select>
+<<<<<<< HEAD
                                 <label for="mother_subject_id">Mother Subject</label>
+=======
+                                <label for="mother_subject_id">Subject</label>
+>>>>>>> 937f1797ab311203d714b328e3f0736038ba8df5
                             </div>
                         </div>
                     </div>
@@ -124,7 +128,11 @@
                                 {
                                     "data": function (data, type, row, meta) {
                                         urie = "";
+<<<<<<< HEAD
                                         return '<button class = "btn btn-sm" onclick="viewDetails(' + data.id + ',' + data.fellow_id + ')" ><i class="fas fa-eye"></i></button>  ';
+=======
+                                        return '<button class = "btn btn-sm" onclick="viewDetails(' + data.id + ',' + data.fellow_id + ')" ><i class="fas fa-eye"></i></button>';
+>>>>>>> 937f1797ab311203d714b328e3f0736038ba8df5
                                     },
                                     "className": "text-indigo-600 hover:text-indigo-900",
                                     "orderable": false,
