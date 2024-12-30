@@ -45,7 +45,4 @@ Route::prefix('exam')->group(function () {
 
     Route::get('/edit-schedule-master/{id}', [ExamOspeIoeController::class, 'editScheduleMaster'])->name('edit-schedule-master');
     Route::put('/update-schedule-master/{id}', [ExamOspeIoeController::class, 'updateScheduleMaster'])->name('update-schedule-master');
-
-    Route::get('/delete-schedule-master/{id}', [ExamOspeIoeController::class, 'deleteScheduleMaster'])->name('delete-schedule-master');
-
 });

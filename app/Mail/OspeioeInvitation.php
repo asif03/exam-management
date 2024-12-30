@@ -34,7 +34,7 @@ class OspeioeInvitation extends Mailable
 
         $pdf = PDF::loadView($htm, $this->data);
 
-        return $this->subject('FCPS Part-II ' . $this->data['schedule']->subject_name . ' ' . $this->data['schedule']->exam_type . ' Letter')
+        return $this->subject($this->data['schedule']->subject_name . ' ' . $this->data['schedule']->exam_type . ' Letter')
             ->view('mail.ospe-ioe-invitation')
             ->with([
                 'schedule'    => $this->data['schedule'],

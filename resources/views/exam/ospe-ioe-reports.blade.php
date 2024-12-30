@@ -52,10 +52,10 @@
                 <div class="form-floating mb-1">
                   <select class="form-select" name="examYear" id="examYear" required aria-label="Floating label select">
 
-                    <option value="@php echo date('Y'); @endphp">@php echo date('Y'); @endphp
+                    <option value="@php echo date('Y')+1; @endphp">@php echo date('Y')+1; @endphp
                     </option>
-                    @foreach(range(date('Y')-1, date('Y') - 5) as $y)
-                    <option value="{{ $y }}">{{ $y}}</option>
+                    @foreach(range(date('Y'), date('Y') - 5) as $y)
+                    <option value="{{ $y }}" @if (date('Y')==$y) selected @endif>{{ $y}}</option>
                     @endforeach
                   </select>
                   <label for="examYear">Year</label>
