@@ -28,9 +28,9 @@ class FellowController extends Controller
      */
     public function index()
     {
-        $menus = $this->getMenuAccessByUser();
+        $menus    = $this->getMenuAccessByUser();
         $subjects = MotherSubject::where('active', true)->get();
-        $fellows = Fellow::orderBy('fellow_id', 'asc')->get();
+        $fellows  = Fellow::orderBy('fellow_id', 'asc')->get();
 
         return view('fellows.index', [
             'subjects' => $subjects,
@@ -118,8 +118,6 @@ class FellowController extends Controller
         return view('fellows.upload-fellows', ['menus' => $menus]);
     }
 
-<<<<<<< HEAD
-=======
     /**
      * Store a ledger excel in storage.
      *
@@ -130,15 +128,14 @@ class FellowController extends Controller
     {
         $created_by = auth()->id();
 
-        $file_path = $request->file('fellowExcelFile')->store('excels');
-        $file_name = $request->file('fellowExcelFile')->getClientOriginalName();
+        $file_path      = $request->file('fellowExcelFile')->store('excels');
+        $file_name      = $request->file('fellowExcelFile')->getClientOriginalName();
         $file_extension = $request->file('fellowExcelFile')->extension();
 
         //dd($request->all());
 
         try {
-            Excel::import(new FellowsImport(), $request->file('fellowExcelFile')
-                    ->store('temp'));
+            Excel::import(new FellowsImport(), $request->file('fellowExcelFile')->store('temp'));
 
             return redirect()->back()->with('success', 'Data uploaded successfully.');
 
@@ -170,5 +167,4 @@ class FellowController extends Controller
         //return redirect('/')->with('success', 'All good!');
     }
 
->>>>>>> 937f1797ab311203d714b328e3f0736038ba8df5
 }

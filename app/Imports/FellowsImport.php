@@ -18,26 +18,51 @@ class FellowsImport implements ToModel, WithHeadingRow, WithBatchInserts, WithUp
      */
     public function model(array $row)
     {
+
+        //dd($row);
+        if (empty($row['fellow_id']) || empty($row['fellow_name'])) {
+            return null; // Skip rows with missing required fields
+        }
+
+        if ($row['fellow_type'] == 'Fellow With Exam') {
+            $fellowTypeId = 1; // Assuming 1 is the ID for 'Fellow With Exam'
+        } elseif ($row['fellow_type'] == 'Fellow Without Exam') {
+            $fellowTypeId = 2; // Assuming 2 is the ID for 'Fellow Without Exam'
+        } elseif ($row['fellow_type'] == 'Honarary Fellow') {
+            $fellowTypeId = 3; // Handle other types or set to null if not applicable
+        }
+
+        $fellowSession     = date('m', strtotime($row['fellowship_date']));
+        $fellowshipSession = '';
+
+        if ($fellowSession == '01') {
+            $fellowshipSession = 'JAN';
+        } elseif ($fellowSession == '07') {
+            $fellowshipSession = 'JUL';
+        }
+
+        //echo $fellowshipSession;die;
+
         return new FellowPgsql([
-            'fellow_id'        => $row['fellow_id'],
-            'fellow_name'      => $row['fellow_name'],
-            'fellow_type_id'   => $row['fellow_type_id'],
-            'subject_id_pgsql' => $row['subject_id'],
-            'fellowship_date'  => date('Y-m-d', strtotime($row['fellowship_date'])),
-            'home_address'     => $row['home_address'],
-            'office_address'   => $row['office_address'],
-            'email'            => $row['email'],
-            'mobile'           => $row['mobile'],
-            'phone_home'       => $row['phone_home'],
-            'phone_office'     => $row['phone_office'],
-            'pin_no'           => $row['pin_no'],
-            'sp_code'          => $row['sp_code'],
-            'institute_id'     => $row['institute_id'],
-            'designation_id'   => $row['designation_id'],
-            'fax'              => $row['fax'],
-            'lifetime'         => $row['lifetime'],
-            'retired'          => $row['retired'],
-            'deceased'         => $row['deceased'],
+            'fellow_id'          => $row['fellow_id'],
+            'fellow_name'        => $row['fellow_name'],
+            'fellowship_date'    => date('Y-m-d', strtotime($row['fellowship_date'])),
+            'fellowship_year'    => date('Y', strtotime($row['fellowship_date'])),
+            'fellowship_session' => $fellowshipSession,
+            'fellow_type_id'     => $fellowTypeId,
+            'office_address'     => $row['mailing_address'],
+            'home_address'       => $row['officeresidence_address'],
+            'mobile'             => $row['mobile'],
+            //'phone_office'    => $row['phone_office'],
+            //'phone_home'      => $row['phone_home'],
+            //'fax'             => $row['fax'],
+            'sub'                => $row['subject'],
+            'inst'               => $row['institute'],
+            'desg'               => $row['designation'],
+            'email'              => $row['email'],
+            'lifetime'           => $row['lifetime'] == true ? 'Y' : 'N',
+            'deceased'           => $row['deceased'] == true ? 'Y' : 'N',
+            'retired'            => $row['retired'] == true ? 'Y' : 'N',
         ]);
     }
 
