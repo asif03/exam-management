@@ -18,8 +18,14 @@
                     </nav>
                 </div>
             </div>
-            <div class="col-5 d-flex justify-content-end">
+            <div class="col-5 d-flex justify-content-end gap-2">
+                <a href="{{ route('fellows.create') }}" class="btn btn-primary btn-rounded mt-2">
+                    <i class="fa fa-user-plus" aria-hidden="true"></i> Add New Fellow List
+                </a>
                 <a href="{{ route('fellows.index') }}" class="btn btn-primary btn-rounded mt-2">
+                    <i class="fa fa-user-md" aria-hidden="true"></i> Update Fellow's List
+                </a>
+                <a href="{{ route('fellows.create') }}" class="btn btn-primary btn-rounded mt-2">
                     <i class="fas fa-list"></i> Fellow's List
                 </a>
             </div>
@@ -53,6 +59,17 @@
                                     <li>5th Column: Institute</li>
                                     <li>6th Column: Designation</li>
                                     <li>7th Column: Fellow Type</li>
+                                    <li>8th Column: Mailing Address</li>
+                                    <li>9th Column: Office/Residence address</li>
+                                    <li>10th Column: Mobile</li>
+                                    <li>11th Column: Phone Office</li>
+                                    <li>12th Column: Phone Home</li>
+                                    <li>13th Column: Fax</li>
+                                    <li>14th Column: Email</li>
+                                    <li>15th Column: Lifetime</li>
+                                    <li>16th Column: Deceased</li>
+                                    <li>17th Column: Retired</li>
+                                    <li>18th Column: Gender</li>
                                 </ul>
                                 <p class="text-sm font-bold text-primary">N.B: No other Column(s)/Extra Sheets contains in
                                     Excel.</p>

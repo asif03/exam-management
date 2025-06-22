@@ -10,6 +10,7 @@ use App\Models\Fellow;
 use App\Models\MotherSubject;
 use App\Traits\MenuTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class FellowController extends Controller
@@ -45,7 +46,25 @@ class FellowController extends Controller
      */
     public function create()
     {
-        //
+        // $maxFellowId = Fellow::where('fellowship_status_id', 1)->max('fellow_id');
+
+        $maxFellowId = DB::table('fellows')
+            ->select(DB::raw('MAX(CAST(fellow_id AS SIGNED)) as max_fellow_id'))
+            ->where('fellowship_status_id', 1)
+            ->value('max_fellow_id');
+
+        $tempFellows = DB::table('fellows_pgsql')
+            ->select('fellow_id', 'fellow_type_id', 'fellow_name')
+            ->whereRaw('CAST(fellow_id AS SIGNED) > ?', [$maxFellowId])
+            ->where('fellow_type_id', 1)
+            ->get();
+
+        //dd($tempFellows);
+
+        return view('fellows.create', [
+            'menus'   => $this->getMenuAccessByUser(),
+            'fellows' => $tempFellows,
+        ]);
     }
 
     /**
