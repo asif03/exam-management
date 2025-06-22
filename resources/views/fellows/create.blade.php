@@ -55,7 +55,7 @@
                                                 <tbody>
                                                     @foreach ($fellows as $fellow)
                                                         <tr>
-                                                            <td>{{ $fellow->index }}</td>
+                                                            <td>{{ $loop->index + 1 }}</td>
                                                             <td>{{ $fellow->fellow_id }}</td>
                                                             <td>{{ $fellow->fellow_name }}</td>
                                                         </tr>
@@ -69,7 +69,7 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="text-left p-2">
-                                        <button type="submit" class="btn btn-primary">Save</button>
+                                        <button type="submit" class="btn btn-primary">Add New Fellows</button>
                                     </div>
                                 </div>
                             </div>
