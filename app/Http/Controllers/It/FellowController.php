@@ -75,7 +75,62 @@ class FellowController extends Controller
      */
     public function store(StoreFellowRequest $request)
     {
-        //
+
+        $maxFellowId = DB::table('fellows')
+            ->select(DB::raw('MAX(CAST(fellow_id AS SIGNED)) as max_fellow_id'))
+            ->where('fellowship_status_id', 1)
+            ->value('max_fellow_id');
+
+        $tempFellows = DB::table('fellows_pgsql')
+            ->select('fellows_pgsql.fellow_type_id AS fellowship_status_id', 'fellows_pgsql.fellowship_year', 'fellows_pgsql.fellowship_session', 'fellows_pgsql.fellow_id',
+                'fellows_pgsql.fellow_name AS name', 'subjects.id AS subject_id', 'fellows_pgsql.office_address AS office_add', 'fellows_pgsql.office_address AS home_add',
+                'fellows_pgsql.phone_office AS office_tel', 'fellows_pgsql.phone_office AS home_tel', 'fellows_pgsql.mobile AS mobile', 'fellows_pgsql.email AS e_mail',
+                'fellows_pgsql.sub', 'fellows_pgsql.desg', 'fellows_pgsql.inst', 'fellows_pgsql.remarks', 'fellows_pgsql.lifetime AS lifetime_member', 'fellows_pgsql.retired AS retired',
+                'fellows_pgsql.deceased AS deceased', 'fellows_pgsql.fellowship_date')
+            ->join('subjects', 'fellows_pgsql.sub', '=', 'subjects.subject_name')
+            ->whereRaw('CAST(fellows_pgsql.fellow_id AS SIGNED) > ?', [$maxFellowId])
+            ->where('fellows_pgsql.fellow_type_id', 1)
+            ->get();
+
+        $newFellows = [];
+
+        foreach ($tempFellows as $fellow) {
+            $newFellows[] = [
+                'fellowship_status_id' => $fellow->fellowship_status_id,
+                'fellowship_year'      => $fellow->fellowship_year,
+                'fellowship_session'   => $fellow->fellowship_session,
+                'fellow_id'            => $fellow->fellow_id,
+                'name'                 => $fellow->name,
+                'subject_id'           => $fellow->subject_id,
+                'office_add'           => $fellow->office_add,
+                'home_add'             => $fellow->home_add,
+                'office_tel'           => $fellow->office_tel,
+                'home_tel'             => $fellow->home_tel,
+                'mobile'               => $fellow->mobile,
+                'e_mail'               => $fellow->e_mail,
+                'sub'                  => $fellow->sub,
+                'desg'                 => $fellow->desg,
+                'inst'                 => $fellow->inst,
+                'remarks'              => $fellow->remarks,
+                'lifetime_member'      => $fellow->lifetime_member,
+                'retired'              => $fellow->retired,
+                'fellowship_date'      => $fellow->fellowship_date,
+                'deceased'             => $fellow->deceased,
+                'created_by'           => auth()->id(),
+            ];
+        }
+
+        if (empty($newFellows)) {
+            return redirect()->back()->with('error', 'No new fellows to insert.');
+        }
+
+        $isBulkInsert = Fellow::insert($newFellows);
+
+        if ($isBulkInsert) {
+            return redirect()->route('fellows.create')->with('success', 'Fellow created successfully.');
+        }
+
+        return redirect()->back()->with('error', 'Failed to create fellow.');
     }
 
     /**
@@ -172,18 +227,81 @@ class FellowController extends Controller
 
             return redirect()->back()->with('errors', $failure->errors());
         }
+    }
 
-        /*$file_id = DB::table('uploads')->insertGetId([
-        'file_name'  => $file_name,
-        'file_desc'  => $file_extension,
-        'file_type'  => 'LED',
-        'file_path'  => $file_path,
-        'created_by' => $created_by,
+    public function editBulkFellows(Request $request)
+    {
+        $menus       = $this->getMenuAccessByUser();
+        $lastUpdated = Fellow::orderBy('updated_at', 'desc')->first();
+
+        if ($lastUpdated->updated_at) {
+            $lastUpdated = $lastUpdated->updated_at->format('Y-m-d');
+        } else {
+            $lastUpdated = date('Y-m-d');
+        }
+
+        //echo "Last Updated: " . $lastUpdated . "<br>";die;
+
+        // Modified fellows
+        $modifiedFellows = DB::table('fellows_pgsql')
+            ->select('fellows_pgsql.fellow_type_id AS fellowship_status_id', 'fellows_pgsql.fellowship_year', 'fellows_pgsql.fellowship_session', 'fellows_pgsql.fellow_id',
+                'fellows_pgsql.fellow_name AS name', 'subjects.id AS subject_id', 'fellows_pgsql.office_address AS office_add', 'fellows_pgsql.office_address AS home_add',
+                'fellows_pgsql.phone_office AS office_tel', 'fellows_pgsql.phone_office AS home_tel', 'fellows_pgsql.mobile AS mobile', 'fellows_pgsql.email AS e_mail',
+                'fellows_pgsql.sub', 'fellows_pgsql.desg', 'fellows_pgsql.inst', 'fellows_pgsql.remarks', 'fellows_pgsql.lifetime AS lifetime_member', 'fellows_pgsql.retired AS retired',
+                'fellows_pgsql.deceased AS deceased', 'fellows_pgsql.fellowship_date', 'fellows_pgsql.updated_at')
+            ->join('fellows', 'fellows_pgsql.fellow_id', '=', 'fellows.fellow_id')
+            ->join('subjects', 'fellows.subject_id', '=', 'subjects.id')
+            ->whereDate('fellows_pgsql.updated_at', '>', $lastUpdated)
+            ->get();
+
+        return view('fellows.edit-bulk-fellows', [
+            'menus'   => $menus,
+            'fellows' => $modifiedFellows,
         ]);
+    }
 
-        Excel::import(new FellowsImport, 'users.xlsx');*/
+    public function updateBulkFellows(Request $request)
+    {
+        $lastUpdated = Fellow::orderBy('updated_at', 'desc')->first();
 
-        //return redirect('/')->with('success', 'All good!');
+        if ($lastUpdated->updated_at) {
+            $lastUpdated = $lastUpdated->updated_at->format('Y-m-d');
+        } else {
+            $lastUpdated = date('Y-m-d');
+        }
+
+        //echo "Last Updated: " . $lastUpdated . "<br>";die;
+
+        // Modified fellows
+        $modifiedFellows = DB::table('fellows_pgsql')
+            ->select('fellows_pgsql.fellow_type_id AS fellowship_status_id', 'fellows_pgsql.fellowship_year', 'fellows_pgsql.fellowship_session', 'fellows_pgsql.fellow_id',
+                'fellows_pgsql.fellow_name AS name', 'subjects.id AS subject_id', 'fellows_pgsql.office_address AS office_add', 'fellows_pgsql.office_address AS home_add',
+                'fellows_pgsql.phone_office AS office_tel', 'fellows_pgsql.phone_office AS home_tel', 'fellows_pgsql.mobile AS mobile', 'fellows_pgsql.email AS e_mail',
+                'fellows_pgsql.sub', 'fellows_pgsql.desg', 'fellows_pgsql.inst', 'fellows_pgsql.remarks', 'fellows_pgsql.lifetime AS lifetime_member', 'fellows_pgsql.retired AS retired',
+                'fellows_pgsql.deceased AS deceased', 'fellows_pgsql.fellowship_date', 'fellows_pgsql.updated_at')
+            ->join('fellows', 'fellows_pgsql.fellow_id', '=', 'fellows.fellow_id')
+            ->join('subjects', 'fellows.subject_id', '=', 'subjects.id')
+            ->whereDate('fellows_pgsql.updated_at', '>', $lastUpdated)
+            ->get();
+
+        foreach ($modifiedFellows as $fellow) {
+            Fellow::where('fellow_id', $fellow->fellow_id)->update([
+                'name'            => $fellow->name,
+                'office_add'      => $fellow->office_add,
+                'home_add'        => $fellow->home_add,
+                'office_tel'      => $fellow->office_tel,
+                'home_tel'        => $fellow->home_tel,
+                'mobile'          => $fellow->mobile,
+                'e_mail'          => $fellow->e_mail,
+                'remarks'         => $fellow->remarks,
+                'lifetime_member' => $fellow->lifetime_member,
+                'retired'         => $fellow->retired,
+                'deceased'        => $fellow->deceased,
+                'updated_at'      => now(),
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Fellows updated successfully.');
     }
 
 }

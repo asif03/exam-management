@@ -22,7 +22,7 @@
                 <a href="{{ route('fellows.create') }}" class="btn btn-primary btn-rounded mt-2">
                     <i class="fa fa-user-plus" aria-hidden="true"></i> Add New Fellow List
                 </a>
-                <a href="{{ route('fellows.index') }}" class="btn btn-primary btn-rounded mt-2">
+                <a href="{{ route('bulk-fellows-edit') }}" class="btn btn-primary btn-rounded mt-2">
                     <i class="fa fa-user-md" aria-hidden="true"></i> Update Fellow's List
                 </a>
                 <a href="{{ route('fellows.create') }}" class="btn btn-primary btn-rounded mt-2">
@@ -45,6 +45,7 @@
                     <div class="card-body">
                         <h4 class="card-title">Upload Fellow File</h4>
                         <h6 class="card-subtitle">Must use <code>xlsx</code></h6>
+                        <x-alert />
                         <div class="md:grid md:grid-cols-3 md:gap-6">
                             <div class="md:col-span-1">
                                 <p class="text-sm font-bold text-primary">Excel Must Contains the following fields with same
@@ -70,6 +71,7 @@
                                     <li>16th Column: Deceased</li>
                                     <li>17th Column: Retired</li>
                                     <li>18th Column: Gender</li>
+                                    <li>19th Column: UpdateAt</li>
                                 </ul>
                                 <p class="text-sm font-bold text-primary">N.B: No other Column(s)/Extra Sheets contains in
                                     Excel.</p>

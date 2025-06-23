@@ -72,7 +72,7 @@ class ExamOspeIoeController extends Controller
          INNER JOIN subjects s ON s.`id` = f.`subject_id`
          WHERE `subject_id` IN (SELECT `subject_id` FROM `allied_subjects`
          WHERE `mother_subject_id` = $subject_id
-         ORDER BY f.`id` DESC) ";
+         ORDER BY f.`fellowship_status_id` ASC, f.`fellow_id` DESC) ";
 
         $data = DB::select($query);
         return json_encode($data);
@@ -145,13 +145,13 @@ class ExamOspeIoeController extends Controller
     {
         $menus = $this->getMenuAccessByUser();
 
-        $subjects = MotherSubject::where('active', true)->get();
+        $subjects      = MotherSubject::where('active', true)->get();
         $schedule_role = ExamScheduleRole::where('active', true)->get();
 
         return view('exam.ospeioeslavelanding', [
-            'menus' => $menus,
-            'subjects'                                       => $subjects,
-            'schedule_role' => $schedule_role
+            'menus'         => $menus,
+            'subjects'      => $subjects,
+            'schedule_role' => $schedule_role,
         ]);
     }
 
@@ -167,7 +167,7 @@ class ExamOspeIoeController extends Controller
 
     public function reports()
     {
-        $menus = $this->getMenuAccessByUser();
+        $menus    = $this->getMenuAccessByUser();
         $examtype = ExamType::where('active', true)->get();
         $subjects = MotherSubject::where('active', true)->get();
         return view('exam.ospe-ioe-reports', ['menus' => $menus, 'examtype' => $examtype, 'subjects' => $subjects]);
@@ -182,9 +182,9 @@ class ExamOspeIoeController extends Controller
     public function scheduleListView(Request $request)
     {
         $exam_type_id = $request->exam_type;
-        $exam_year = $request->exam_year;
+        $exam_year    = $request->exam_year;
         $exam_session = $request->exam_session;
-        $subject_id = $request->subject;
+        $subject_id   = $request->subject;
 
         $schedules = DB::table('exam_schedule_masters')
             ->where('exam_schedule_masters.exam_type_id', '=', $exam_type_id)
@@ -320,8 +320,8 @@ class ExamOspeIoeController extends Controller
         $data['invigilators'] = $invigilators;
 
         $rptName = $scheduleInfo[0]->exam_type . '_' . $scheduleInfo[0]->subject_name . '_' . $scheduleInfo[0]->exam_date . ".pdf";
-        $htm = "exam.ospe-ioe-schedule-pdf";
-        $pdf = PDF::loadView($htm, $data);
+        $htm     = "exam.ospe-ioe-schedule-pdf";
+        $pdf     = PDF::loadView($htm, $data);
 
         $pdf->setPaper('a4', 'portrait');
         $pdf->getDomPDF()->set_option("enable_php", true);
@@ -330,7 +330,7 @@ class ExamOspeIoeController extends Controller
 
     public function editDetailsSchedule($id)
     {
-        $menus = $this->getMenuAccessByUser();
+        $menus      = $this->getMenuAccessByUser();
         $data['id'] = $id;
 
         $scheduleInfo = DB::table('exam_schedule_masters')
@@ -448,7 +448,7 @@ class ExamOspeIoeController extends Controller
         $data['invigilators'] = $invigilators;
 
         $rptName = $scheduleInfo[0]->exam_type . '_' . $scheduleInfo[0]->subject_name . '_' . $invigilators[0]->name . ".pdf";
-        $htm = "exam.ospe-ioe-invitation-pdf";
+        $htm     = "exam.ospe-ioe-invitation-pdf";
 
         //return view($htm, $data);
         $pdf = PDF::loadView($htm, $data);
@@ -460,9 +460,9 @@ class ExamOspeIoeController extends Controller
 
     public function editScheduleMaster($id)
     {
-        $subjects = MotherSubject::all();
-        $examtype = ExamType::all();
-        $examhall = ExamHall::all();
+        $subjects         = MotherSubject::all();
+        $examtype         = ExamType::all();
+        $examhall         = ExamHall::all();
         $xmScheduleMaster = ExamScheduleMaster::findOrFail($id);
 
         //dd($xmScheduleMaster);
@@ -475,8 +475,8 @@ class ExamOspeIoeController extends Controller
                 'menus'      => $menus,
                 'xmScMaster' => $xmScheduleMaster,
                 'subjects'   => $subjects,
-                'examtype' => $examtype,
-                'examhall'   => $examhall
+                'examtype'   => $examtype,
+                'examhall'   => $examhall,
             ]
         );
     }
@@ -627,16 +627,16 @@ class ExamOspeIoeController extends Controller
 
         $recipients = array();
         foreach ($invigilators as $invigilator) {
-            $ids[] = $invigilator->id;
+            $ids[]        = $invigilator->id;
             $recipients[] = $invigilator->e_mail;
         }
 
-        $iLoop = 0;
+        $iLoop               = 0;
         $cntEmailSentSuccess = 0;
         $cntEmailSentFailure = 0;
 
         foreach ($recipients as $recipient) {
-            $collection = new Collection();
+            $collection           = new Collection();
             $data['invigilators'] = $collection->push((object) $invigilators[$iLoop]);
 
             Mail::to($recipient)->send(new OspeioeInvitation($data));
@@ -704,31 +704,29 @@ class ExamOspeIoeController extends Controller
             ->get();
 
         $smsBody = 'Dear Sir, You have been appointed as ' . $invigilator[0]->position_name . ' for the '
-            . $scheduleInfo[0]->subject_name . ', ' . $scheduleInfo[0]->exam_type . '. You are requested to come to '
-            . $scheduleInfo[0]->block_name . ', ' . $scheduleInfo[0]->hall_name . ', BCPS on ' . $scheduleInfo[0]->exam_date . ' at '
-            . date('h:i a', strtotime($scheduleInfo[0]->exam_start_time)) . ' Please consider this SMS as an alternative to the official letter.'
+        . $scheduleInfo[0]->subject_name . ', ' . $scheduleInfo[0]->exam_type . '. You are requested to come to '
+        . $scheduleInfo[0]->block_name . ', ' . $scheduleInfo[0]->hall_name . ', BCPS on ' . $scheduleInfo[0]->exam_date . ' at '
+        . date('h:i a', strtotime($scheduleInfo[0]->exam_start_time)) . ' Please consider this SMS as an alternative to the official letter.'
             . ' Contact us, if any query: 01713068214/01755617229.'
             . 'Regards, Controller of Examination, BCPS.';
-
 
         /* Old (Api) SMS Sending Code
         $smsSent = new Sms();
         $isSent = $smsSent->send($invigilator[0]->mobile, $smsBody);
 
         if ($isSent->status == 'success') {
-            $scheduleDetails = ExamScheduleDetail::findOrFail($invisilatorId);
-            $scheduleDetails->update(['sms_sent' => 'Y']);
-            return redirect()->route('edit-ospe-ioe-details-schedule', ['id' => $id])->with('success', 'Successfully Sent SMS.');
+        $scheduleDetails = ExamScheduleDetail::findOrFail($invisilatorId);
+        $scheduleDetails->update(['sms_sent' => 'Y']);
+        return redirect()->route('edit-ospe-ioe-details-schedule', ['id' => $id])->with('success', 'Successfully Sent SMS.');
         } elseif ($isSent->status == 'failed') {
-            $scheduleDetails = ExamScheduleDetail::findOrFail($invisilatorId);
-            $scheduleDetails->update(['sms_sent' => 'N']);
-            return redirect()->route('edit-ospe-ioe-details-schedule', ['id' => $id])->with('error', 'Failed to Sent SMS.');
+        $scheduleDetails = ExamScheduleDetail::findOrFail($invisilatorId);
+        $scheduleDetails->update(['sms_sent' => 'N']);
+        return redirect()->route('edit-ospe-ioe-details-schedule', ['id' => $id])->with('error', 'Failed to Sent SMS.');
         }*/
 
-
         $smsParams = array(
-            'msisdn' => $invigilator[0]->mobile,
-            'sms' => $smsBody,
+            'msisdn'  => $invigilator[0]->mobile,
+            'sms'     => $smsBody,
             'csms_id' => rand(1000, 9999),
         );
 
@@ -745,8 +743,8 @@ class ExamOspeIoeController extends Controller
         }
 
         /*echo '<pre>';
-        print_r($response);
-        echo '</pre>';*/
+    print_r($response);
+    echo '</pre>';*/
     }
 
     /**
@@ -795,14 +793,14 @@ class ExamOspeIoeController extends Controller
             ->get();
 
         $recipients = array();
-        $messages = array();
+        $messages   = array();
 
         foreach ($invigilators as $invigilator) {
             $recipients[] = $invigilator->mobile;
-            $messages[] = 'Dear Sir, You have been appointed as ' . $invigilator->position_name . ' for the '
-                . $scheduleInfo[0]->subject_name . ', ' . $scheduleInfo[0]->exam_type . '. You are requested to come to '
-                . $scheduleInfo[0]->block_name . ', ' . $scheduleInfo[0]->hall_name . ', BCPS on ' . $scheduleInfo[0]->exam_date . ' at '
-                . date('h:i a', strtotime($scheduleInfo[0]->exam_start_time)) . ' Please consider this SMS as an alternative to the official letter.'
+            $messages[]   = 'Dear Sir, You have been appointed as ' . $invigilator->position_name . ' for the '
+            . $scheduleInfo[0]->subject_name . ', ' . $scheduleInfo[0]->exam_type . '. You are requested to come to '
+            . $scheduleInfo[0]->block_name . ', ' . $scheduleInfo[0]->hall_name . ', BCPS on ' . $scheduleInfo[0]->exam_date . ' at '
+            . date('h:i a', strtotime($scheduleInfo[0]->exam_start_time)) . ' Please consider this SMS as an alternative to the official letter.'
                 . ' Contact us, if any query: 01713068214/01755617229.'
                 . 'Regards, Controller of Examination, BCPS.';
         }

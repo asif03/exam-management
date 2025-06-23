@@ -7,7 +7,7 @@
     <div class="page-breadcrumb">
         <div class="row">
             <div class="col-7 align-self-center">
-                <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">New Fellow List</h4>
+                <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Modified Fellow List</h4>
                 <div class="d-flex align-items-center">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb m-0 p-0">
@@ -36,8 +36,8 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">New Fellows to Import</h5>
-                        <form action="{{ route('fellows.store') }}" method="POST">
+                        <h5 class="card-title">Update Modified Fellow List</h5>
+                        <form action="{{ route('bulk-fellows-update') }}" method="POST">
                             @csrf
                             <x-alert />
                             <div class="row">
@@ -57,7 +57,7 @@
                                                         <tr>
                                                             <td>{{ $loop->index + 1 }}</td>
                                                             <td>{{ $fellow->fellow_id }}</td>
-                                                            <td>{{ $fellow->fellow_name }}</td>
+                                                            <td>{{ $fellow->name }}</td>
                                                         </tr>
                                                     @endforeach
                                                 </tbody>
@@ -69,7 +69,7 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="text-left p-2">
-                                        <button type="submit" class="btn btn-primary">Add New Fellows</button>
+                                        <button type="submit" class="btn btn-primary">Update Fellows</button>
                                     </div>
                                 </div>
                             </div>

@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\FellowPgsql;
+use DateTime;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -19,6 +20,8 @@ class FellowsImport implements ToModel, WithHeadingRow, WithBatchInserts, WithUp
     public function model(array $row)
     {
 
+        //echo date('Y-m-d', strtotime($row['updated_at']));
+        //echo $row['updated_at'] ? DateTime::createFromFormat('d/m/Y', $row['updated_at'])->format('Y-m-d') : date('Y-m-d');
         //dd($row);
         if (empty($row['fellow_id']) || empty($row['fellow_name'])) {
             return null; // Skip rows with missing required fields
@@ -40,6 +43,8 @@ class FellowsImport implements ToModel, WithHeadingRow, WithBatchInserts, WithUp
         } elseif ($fellowSession == '07') {
             $fellowshipSession = 'JUL';
         }
+
+        $updatedAt = $row['updated_at'] ? DateTime::createFromFormat('d/m/Y', $row['updated_at'])->format('Y-m-d') : date('Y-m-d');
 
         //echo $fellowshipSession;die;
 
@@ -63,6 +68,7 @@ class FellowsImport implements ToModel, WithHeadingRow, WithBatchInserts, WithUp
             'lifetime'           => $row['lifetime'] == true ? 'Y' : 'N',
             'deceased'           => $row['deceased'] == true ? 'Y' : 'N',
             'retired'            => $row['retired'] == true ? 'Y' : 'N',
+            'updated_at'         => $updatedAt,
         ]);
     }
 

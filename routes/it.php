@@ -50,5 +50,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('fellows', FellowController::class);
         Route::get('/upload-fellows', [FellowController::class, 'uploadFellows'])->name('upload-fellows');
         Route::post('/import-fellows', [FellowController::class, 'importFellows'])->name('import-fellows');
+        Route::get('/edit-bulk-fellows', [FellowController::class, 'editBulkFellows'])->name('bulk-fellows-edit');
+        Route::post('/bulk-update-fellows', [FellowController::class, 'updateBulkFellows'])->name('bulk-fellows-update');
     });
 });

@@ -54,7 +54,7 @@
                         <h5 class="card-title mt-2 text-info">List of Fellows of Selected Subject:</h5>
                         <div class="row">
                             <div class="col">
-                                <div class="p-2 border border-info border-1 rounded">
+                                <div class="p-2 border-info border-1 rounded">
                                     <div class="table-responsive">
                                         <table id="fellowInfoTable" class="table border table-striped table-bordered">
                                             <thead>
@@ -126,16 +126,10 @@
                                     },
                                     {
                                         "data": function(data, type, row, meta) {
-                                            urie = ""; <<
-                                            << << < HEAD
+                                            urie = "";
                                             return '<button class = "btn btn-sm" onclick="viewDetails(' +
                                                 data.id + ',' + data.fellow_id +
-                                                ')" ><i class="fas fa-eye"></i></button>  '; ===
-                                            === =
-                                            return '<button class = "btn btn-sm" onclick="viewDetails(' +
-                                                data.id + ',' + data.fellow_id +
-                                                ')" ><i class="fas fa-eye"></i></button>'; >>>
-                                            >>> > 937 f1797ab311203d714b328e3f0736038ba8df5
+                                                ')" ><i class="fas fa-eye"></i></button>';
                                         },
                                         "className": "text-indigo-600 hover:text-indigo-900",
                                         "orderable": false,
