@@ -48,6 +48,10 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/exam-schedule-role/{id}/active', [ExamScheduleRoleController::class, 'active'])->name('exam-schedule-role.active');
 
         Route::resource('fellows', FellowController::class);
+        Route::get('/get-fellows', [FellowController::class, 'getFellows'])->name('fellow-list');
+        Route::get('/fellow-list-by-subject', [FellowController::class, 'getSubjectWiseFellows'])->name('fellows-by-subject');
+        Route::get('/new-fellows-by-type', [FellowController::class, 'newFellowsByType'])->name('new-fellows-by-type');
+
         Route::get('/upload-fellows', [FellowController::class, 'uploadFellows'])->name('upload-fellows');
         Route::post('/import-fellows', [FellowController::class, 'importFellows'])->name('import-fellows');
         Route::get('/edit-bulk-fellows', [FellowController::class, 'editBulkFellows'])->name('bulk-fellows-edit');

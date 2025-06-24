@@ -24,7 +24,7 @@ class StoreFellowRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'fellowType' => 'required',
         ];
     }
 }

@@ -22,6 +22,80 @@ class FellowController extends Controller
         $this->middleware('auth');
     }
 
+    public function getFellows()
+    {
+        $query = "SELECT f.`id`, f.`fellowship_status_id`, fs.`fellow_status_mame`, f.`fellowship_year`, f.`fellowship_session`,
+         f.`fellow_id`, f.`name`,f.`subject_id`, f.`office_add`, f.`mobile`, f.`e_mail`, f.`pnr_no`,
+         f.`active`, s.`subject_name`, f.`fellowship_date`, f.`deceased`, f.`retired`, f.`lifetime_member`
+         FROM `fellows` f
+         INNER JOIN subjects s ON s.`id` = f.`subject_id`
+         INNER JOIN fellowship_statuses fs ON fs.`id` = f.`fellowship_status_id`
+         WHERE f.`fellowship_status_id` NOT IN (4)
+         ORDER BY f.`id` ASC";
+
+        $data = DB::select($query);
+        return json_encode($data);
+    }
+
+    public function getSubjectWiseFellows()
+    {
+        $subject_id = $_REQUEST['subject_id'];
+
+        $query = "SELECT f.`id`, f.`fellowship_status_id`, fs.`fellow_status_mame`, f.`fellowship_year`, f.`fellowship_session`,
+         f.`fellow_id`, f.`name`,f.`subject_id`, f.`office_add`, f.`mobile`, f.`e_mail`, f.`pnr_no`,
+         f.`active`, s.`subject_name`, f.`fellowship_date`, f.`deceased`, f.`retired`, f.`lifetime_member`
+         FROM `fellows` f
+         INNER JOIN subjects s ON s.`id` = f.`subject_id`
+         INNER JOIN fellowship_statuses fs ON fs.`id` = f.`fellowship_status_id`
+         WHERE `subject_id` IN (SELECT `subject_id` FROM `allied_subjects`
+         WHERE `mother_subject_id` = $subject_id
+         ORDER BY f.`fellowship_status_id` ASC, f.`fellow_id` DESC)
+         AND f.`fellowship_status_id` NOT IN (4)
+         ORDER BY f.`id` ASC";
+
+        $data = DB::select($query);
+        return json_encode($data);
+    }
+
+    public function newFellowsByType()
+    {
+        $fellowTypeId = $_REQUEST['fellowShipTypeId'];
+
+        if ($fellowTypeId == 1) {
+            $maxFellowId = DB::table('fellows')
+                ->select(DB::raw('MAX(CAST(fellow_id AS SIGNED)) as max_fellow_id'))
+                ->where('fellowship_status_id', 1)
+                ->value('max_fellow_id');
+
+            $tempFellows = DB::table('fellows_pgsql')
+                ->select('fellow_id', 'fellow_type_id', 'fellow_name', 'sub', 'email', 'mobile')
+                ->whereRaw('CAST(fellow_id AS SIGNED) > ?', [$maxFellowId])
+                ->where('fellow_type_id', 1)
+                ->get();
+        } elseif ($fellowTypeId == 2) {
+            $tempFellows = DB::table('fellows_pgsql')
+                ->select('fellow_id', 'fellow_type_id', 'fellow_name', 'sub', 'email', 'mobile')
+                ->whereNotIn('fellow_id', function ($query) {
+                    $query->select('fellow_id')
+                        ->from('fellows')
+                        ->where('fellowship_status_id', 2);
+                })
+                ->where('fellow_type_id', $fellowTypeId)
+                ->get();
+        } elseif ($fellowTypeId == 3) {
+            $tempFellows = DB::table('fellows_pgsql')
+                ->select('fellow_id', 'fellow_type_id', 'fellow_name', 'sub', 'email', 'mobile')
+                ->whereNotIn('fellow_id', function ($query) {
+                    $query->select('fellow_id')
+                        ->from('fellows')
+                        ->where('fellowship_status_id', 3);
+                })
+                ->where('fellow_type_id', $fellowTypeId)
+                ->get();
+        }
+        return json_encode($tempFellows);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -46,24 +120,9 @@ class FellowController extends Controller
      */
     public function create()
     {
-        // $maxFellowId = Fellow::where('fellowship_status_id', 1)->max('fellow_id');
-
-        $maxFellowId = DB::table('fellows')
-            ->select(DB::raw('MAX(CAST(fellow_id AS SIGNED)) as max_fellow_id'))
-            ->where('fellowship_status_id', 1)
-            ->value('max_fellow_id');
-
-        $tempFellows = DB::table('fellows_pgsql')
-            ->select('fellow_id', 'fellow_type_id', 'fellow_name')
-            ->whereRaw('CAST(fellow_id AS SIGNED) > ?', [$maxFellowId])
-            ->where('fellow_type_id', 1)
-            ->get();
-
-        //dd($tempFellows);
-
         return view('fellows.create', [
-            'menus'   => $this->getMenuAccessByUser(),
-            'fellows' => $tempFellows,
+            'menus'       => $this->getMenuAccessByUser(),
+            'fellowTypes' => DB::table('fellowship_statuses')->whereNotIn('id', [4])->get(),
         ]);
     }
 
@@ -75,30 +134,44 @@ class FellowController extends Controller
      */
     public function store(StoreFellowRequest $request)
     {
+        $fellowShipType = $request->fellowType;
 
-        $maxFellowId = DB::table('fellows')
-            ->select(DB::raw('MAX(CAST(fellow_id AS SIGNED)) as max_fellow_id'))
-            ->where('fellowship_status_id', 1)
-            ->value('max_fellow_id');
+        if ($fellowShipType == 1) {
+            $maxFellowId = DB::table('fellows')
+                ->select(DB::raw('MAX(CAST(fellow_id AS SIGNED)) as max_fellow_id'))
+                ->where('fellowship_status_id', 1)
+                ->value('max_fellow_id');
 
-        $tempFellows = DB::table('fellows_pgsql')
-            ->select('fellows_pgsql.fellow_type_id AS fellowship_status_id', 'fellows_pgsql.fellowship_year', 'fellows_pgsql.fellowship_session', 'fellows_pgsql.fellow_id',
-                'fellows_pgsql.fellow_name AS name', 'subjects.id AS subject_id', 'fellows_pgsql.office_address AS office_add', 'fellows_pgsql.office_address AS home_add',
-                'fellows_pgsql.phone_office AS office_tel', 'fellows_pgsql.phone_office AS home_tel', 'fellows_pgsql.mobile AS mobile', 'fellows_pgsql.email AS e_mail',
-                'fellows_pgsql.sub', 'fellows_pgsql.desg', 'fellows_pgsql.inst', 'fellows_pgsql.remarks', 'fellows_pgsql.lifetime AS lifetime_member', 'fellows_pgsql.retired AS retired',
-                'fellows_pgsql.deceased AS deceased', 'fellows_pgsql.fellowship_date')
-            ->join('subjects', 'fellows_pgsql.sub', '=', 'subjects.subject_name')
-            ->whereRaw('CAST(fellows_pgsql.fellow_id AS SIGNED) > ?', [$maxFellowId])
-            ->where('fellows_pgsql.fellow_type_id', 1)
-            ->get();
+            $tempFellows = DB::table('fellows_pgsql')
+                ->select('fellows_pgsql.fellow_type_id AS fellowship_status_id', 'fellows_pgsql.fellowship_year', 'fellows_pgsql.fellowship_session', 'fellows_pgsql.fellow_id',
+                    'fellows_pgsql.fellow_name AS name', 'subjects.id AS subject_id', 'fellows_pgsql.office_address AS office_add', 'fellows_pgsql.office_address AS home_add',
+                    'fellows_pgsql.phone_office AS office_tel', 'fellows_pgsql.phone_office AS home_tel', 'fellows_pgsql.mobile AS mobile', 'fellows_pgsql.email AS e_mail',
+                    'fellows_pgsql.sub', 'fellows_pgsql.desg', 'fellows_pgsql.inst', 'fellows_pgsql.remarks', 'fellows_pgsql.lifetime AS lifetime_member', 'fellows_pgsql.retired AS retired',
+                    'fellows_pgsql.deceased AS deceased', 'fellows_pgsql.fellowship_date')
+                ->join('subjects', 'fellows_pgsql.sub', '=', 'subjects.subject_name')
+                ->whereRaw('CAST(fellows_pgsql.fellow_id AS SIGNED) > ?', [$maxFellowId])
+                ->where('fellows_pgsql.fellow_type_id', 1)
+                ->get();
+
+        } else {
+            $tempFellows = DB::table('fellows_pgsql')
+                ->select('fellows_pgsql.fellow_type_id AS fellowship_status_id', 'fellows_pgsql.fellowship_year', 'fellows_pgsql.fellowship_session', 'fellows_pgsql.fellow_id',
+                    'fellows_pgsql.fellow_name AS name', 'subjects.id AS subject_id', 'fellows_pgsql.office_address AS office_add', 'fellows_pgsql.office_address AS home_add',
+                    'fellows_pgsql.phone_office AS office_tel', 'fellows_pgsql.phone_office AS home_tel', 'fellows_pgsql.mobile AS mobile', 'fellows_pgsql.email AS e_mail',
+                    'fellows_pgsql.sub', 'fellows_pgsql.desg', 'fellows_pgsql.inst', 'fellows_pgsql.remarks', 'fellows_pgsql.lifetime AS lifetime_member', 'fellows_pgsql.retired AS retired',
+                    'fellows_pgsql.deceased AS deceased', 'fellows_pgsql.fellowship_date')
+                ->join('subjects', 'fellows_pgsql.sub', '=', 'subjects.subject_name')
+                ->where('fellows_pgsql.fellow_type_id', $fellowShipType)
+                ->get();
+        }
 
         $newFellows = [];
 
         foreach ($tempFellows as $fellow) {
             $newFellows[] = [
                 'fellowship_status_id' => $fellow->fellowship_status_id,
-                'fellowship_year'      => $fellow->fellowship_year,
-                'fellowship_session'   => $fellow->fellowship_session,
+                'fellowship_year'      => $fellow->fellowship_year ? $fellow->fellowship_year : date('Y'),
+                'fellowship_session'   => $fellow->fellowship_session ? $fellow->fellowship_session : '1st',
                 'fellow_id'            => $fellow->fellow_id,
                 'name'                 => $fellow->name,
                 'subject_id'           => $fellow->subject_id,
@@ -152,7 +225,7 @@ class FellowController extends Controller
      */
     public function edit(Fellow $fellow)
     {
-        //
+        echo 'edit fellow';
     }
 
     /**
@@ -240,8 +313,6 @@ class FellowController extends Controller
             $lastUpdated = date('Y-m-d');
         }
 
-        //echo "Last Updated: " . $lastUpdated . "<br>";die;
-
         // Modified fellows
         $modifiedFellows = DB::table('fellows_pgsql')
             ->select('fellows_pgsql.fellow_type_id AS fellowship_status_id', 'fellows_pgsql.fellowship_year', 'fellows_pgsql.fellowship_session', 'fellows_pgsql.fellow_id',
@@ -270,8 +341,6 @@ class FellowController extends Controller
             $lastUpdated = date('Y-m-d');
         }
 
-        //echo "Last Updated: " . $lastUpdated . "<br>";die;
-
         // Modified fellows
         $modifiedFellows = DB::table('fellows_pgsql')
             ->select('fellows_pgsql.fellow_type_id AS fellowship_status_id', 'fellows_pgsql.fellowship_year', 'fellows_pgsql.fellowship_session', 'fellows_pgsql.fellow_id',
@@ -297,6 +366,7 @@ class FellowController extends Controller
                 'lifetime_member' => $fellow->lifetime_member,
                 'retired'         => $fellow->retired,
                 'deceased'        => $fellow->deceased,
+                'updated_by'      => auth()->id(),
                 'updated_at'      => now(),
             ]);
         }

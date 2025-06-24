@@ -60,12 +60,14 @@
                                             <thead>
                                                 <tr>
                                                     <th>Sl.</th>
+                                                    <th>Fellowship Type</th>
                                                     <th width="5%">Fellow ID</th>
                                                     <th>Name</th>
                                                     <th>Subject</th>
                                                     <th>PNR</th>
                                                     <th>Mobile</th>
                                                     <th>Email</th>
+                                                    <th>Deceased?</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -78,26 +80,17 @@
                 </div>
             </div>
             <script>
-                var dataTab = $('#fellowInfoTable').DataTable();
+                //var dataTab = $('#fellowInfoTable').DataTable();
 
-                function toggleFellow(subjectId) {
+                getFellows();
 
-                    let subject_id = subjectId;
-
-                    if (!subject_id) {
-                        alert("Please select subject first!");
-                        return false;
-                    }
+                function getFellows() {
 
                     $.ajax({
                         type: "get",
-                        url: "{{ URL::to('/exam/fellow-by-subject') }}",
-                        data: {
-                            subject_id: subject_id
-                        },
+                        url: "{{ URL::to('/invisilators/get-fellows') }}",
                         dataType: "json",
                         success: function(data) {
-
                             dataTab = $('#fellowInfoTable').DataTable({
                                 "aaData": data,
                                 "order": [
@@ -105,6 +98,9 @@
                                 ],
                                 "columns": [{
                                         "data": "id"
+                                    },
+                                    {
+                                        "data": "fellow_status_mame"
                                     },
                                     {
                                         "data": "fellow_id"
@@ -126,19 +122,124 @@
                                     },
                                     {
                                         "data": function(data, type, row, meta) {
-                                            urie = "";
-                                            return '<button class = "btn btn-sm" onclick="viewDetails(' +
-                                                data.id + ',' + data.fellow_id +
-                                                ')" ><i class="fas fa-eye"></i></button>';
+                                            if (data.deceased == 'Y') {
+                                                return '<span class="badge bg-danger"><i class="fa fa-user-times" aria-hidden="true"></i></span>';
+                                            } else {
+                                                return '<span class="badge bg-success">No</span>';
+                                            }
+                                        },
+                                    },
+                                    {
+                                        "data": function(data, type, row, meta) {
+                                            urie = "{{ route('fellows.edit', 'lid') }}";
+                                            urie = urie.replace('lid', data.id);
+                                            return '<a href="' + urie +
+                                                '" ><i class="fas fa-edit"></i></a> ' +
+                                                '<button class="btn-sm btn" onclick="delSchedule(' +
+                                                data.id +
+                                                ')"><i class="fas fa-eye"></i></i></button>';
                                         },
                                         "className": "text-indigo-600 hover:text-indigo-900",
                                         "orderable": false,
                                     },
                                 ],
                                 "columnDefs": [{
-                                    "targets": 0,
-                                    "visible": false,
-                                }, ]
+                                        "targets": 0,
+                                        "visible": false,
+                                    },
+                                    {
+                                        "targets": 8,
+                                        "orderable": false,
+                                        "searchable": false,
+                                        "className": "text-center",
+                                    },
+                                ]
+                            });
+                        }
+                    });
+                }
+
+                function toggleFellow(subjectId) {
+
+                    let subject_id = subjectId;
+
+                    if (!subject_id) {
+                        alert("Please select subject first!");
+                        return false;
+                    }
+
+                    $.ajax({
+                        type: "get",
+                        url: "{{ URL::to('/invisilators/fellow-list-by-subject') }}",
+                        data: {
+                            subject_id: subject_id
+                        },
+                        dataType: "json",
+                        success: function(data) {
+
+                            dataTab = $('#fellowInfoTable').DataTable({
+                                "aaData": data,
+                                "order": [
+                                    [1, 'asc']
+                                ],
+                                "columns": [{
+                                        "data": "id"
+                                    },
+                                    {
+                                        "data": "fellow_status_mame"
+                                    },
+                                    {
+                                        "data": "fellow_id"
+                                    },
+                                    {
+                                        "data": "name"
+                                    },
+                                    {
+                                        "data": "subject_name"
+                                    },
+                                    {
+                                        "data": "pnr_no"
+                                    },
+                                    {
+                                        "data": "mobile"
+                                    },
+                                    {
+                                        "data": "e_mail"
+                                    },
+                                    {
+                                        "data": function(data, type, row, meta) {
+                                            if (data.deceased == 'Y') {
+                                                return '<span class="badge bg-danger"><i class="fa fa-user-times" aria-hidden="true"></i></span>';
+                                            } else {
+                                                return '<span class="badge bg-success">No</span>';
+                                            }
+                                        },
+                                    },
+                                    {
+                                        "data": function(data, type, row, meta) {
+                                            urie = "{{ route('fellows.edit', 'lid') }}";
+                                            urie = urie.replace('lid', data.id);
+                                            return '<a href="' + urie +
+                                                '" ><i class="fas fa-edit"></i></a> ' +
+                                                '<button class="btn-sm btn" onclick="delSchedule(' +
+                                                data.id +
+                                                ')"><i class="fas fa-eye"></i></i></button>';
+                                        },
+                                        "className": "text-indigo-600 hover:text-indigo-900",
+                                        "orderable": false,
+                                    },
+                                ],
+                                "columnDefs": [{
+                                        "targets": 0,
+                                        "visible": false,
+                                    },
+                                    {
+                                        "targets": 8,
+                                        "orderable": false,
+                                        "searchable": false,
+                                        "className": "text-center",
+                                    },
+                                ]
                             });
                         }
                     });

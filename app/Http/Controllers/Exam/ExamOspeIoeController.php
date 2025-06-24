@@ -65,11 +65,12 @@ class ExamOspeIoeController extends Controller
     {
         $subject_id = $_REQUEST['subject_id'];
 
-        $query = "SELECT f.`id`, f.`fellowship_status_id`, f.`fellowship_year`, f.`fellowship_session`,
+        $query = "SELECT f.`id`, f.`fellowship_status_id`, fs.`fellow_status_mame`, f.`fellowship_year`, f.`fellowship_session`,
          f.`fellow_id`, f.`name`,f.`subject_id`, f.`office_add`, f.`mobile`, f.`e_mail`, f.`pnr_no`,
-         f.`active`, s.`subject_name`, f.`fellowship_date`
+         f.`active`, s.`subject_name`, f.`fellowship_date`, f.`deceased`, f.`retired`, f.`lifetime_member`
          FROM `fellows` f
          INNER JOIN subjects s ON s.`id` = f.`subject_id`
+         INNER JOIN fellowship_statuses fs ON fs.`id` = f.`fellowship_status_id`
          WHERE `subject_id` IN (SELECT `subject_id` FROM `allied_subjects`
          WHERE `mother_subject_id` = $subject_id
          ORDER BY f.`fellowship_status_id` ASC, f.`fellow_id` DESC) ";

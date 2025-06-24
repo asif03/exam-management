@@ -19,6 +19,9 @@ class FellowsImport implements ToModel, WithHeadingRow, WithBatchInserts, WithUp
      */
     public function model(array $row)
     {
+        // Uncomment the following lines to debug the row data
+        //echo $row['fellow_id'];
+        //check if the date is in the correct format
 
         //echo date('Y-m-d', strtotime($row['updated_at']));
         //echo $row['updated_at'] ? DateTime::createFromFormat('d/m/Y', $row['updated_at'])->format('Y-m-d') : date('Y-m-d');
@@ -35,6 +38,13 @@ class FellowsImport implements ToModel, WithHeadingRow, WithBatchInserts, WithUp
             $fellowTypeId = 3; // Handle other types or set to null if not applicable
         }
 
+        $fellowShipYear = '';
+        if (strlen($row['fellowship_date']) < 10) {
+            $fellowShipYear = $row['fellowship_date'];
+        } else {
+            $fellowShipYear = date('Y', strtotime($row['fellowship_date']));
+        }
+
         $fellowSession     = date('m', strtotime($row['fellowship_date']));
         $fellowshipSession = '';
 
@@ -42,17 +52,18 @@ class FellowsImport implements ToModel, WithHeadingRow, WithBatchInserts, WithUp
             $fellowshipSession = 'JAN';
         } elseif ($fellowSession == '07') {
             $fellowshipSession = 'JUL';
+        } else {
+            $fellowshipSession = 'N/A';
         }
 
         $updatedAt = $row['updated_at'] ? DateTime::createFromFormat('d/m/Y', $row['updated_at'])->format('Y-m-d') : date('Y-m-d');
 
-        //echo $fellowshipSession;die;
-
         return new FellowPgsql([
             'fellow_id'          => $row['fellow_id'],
             'fellow_name'        => $row['fellow_name'],
-            'fellowship_date'    => date('Y-m-d', strtotime($row['fellowship_date'])),
-            'fellowship_year'    => date('Y', strtotime($row['fellowship_date'])),
+            //'fellowship_date'    => date('Y-m-d', strtotime($row['fellowship_date'])),
+            'fellowship_date'    => $row['fellowship_date'],
+            'fellowship_year'    => $fellowShipYear,
             'fellowship_session' => $fellowshipSession,
             'fellow_type_id'     => $fellowTypeId,
             'office_address'     => $row['mailing_address'],
