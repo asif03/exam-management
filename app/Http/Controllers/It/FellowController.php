@@ -144,7 +144,7 @@ class FellowController extends Controller
 
             $tempFellows = DB::table('fellows_pgsql')
                 ->select('fellows_pgsql.fellow_type_id AS fellowship_status_id', 'fellows_pgsql.fellowship_year', 'fellows_pgsql.fellowship_session', 'fellows_pgsql.fellow_id',
-                    'fellows_pgsql.fellow_name AS name', 'subjects.id AS subject_id', 'fellows_pgsql.office_address AS office_add', 'fellows_pgsql.office_address AS home_add',
+                    'fellows_pgsql.fellow_name AS name', 'subjects.id AS subject_id', 'fellows_pgsql.office_address AS office_add', 'fellows_pgsql.home_address AS home_add',
                     'fellows_pgsql.phone_office AS office_tel', 'fellows_pgsql.phone_office AS home_tel', 'fellows_pgsql.mobile AS mobile', 'fellows_pgsql.email AS e_mail',
                     'fellows_pgsql.sub', 'fellows_pgsql.desg', 'fellows_pgsql.inst', 'fellows_pgsql.remarks', 'fellows_pgsql.lifetime AS lifetime_member', 'fellows_pgsql.retired AS retired',
                     'fellows_pgsql.deceased AS deceased', 'fellows_pgsql.fellowship_date')
@@ -156,7 +156,7 @@ class FellowController extends Controller
         } else {
             $tempFellows = DB::table('fellows_pgsql')
                 ->select('fellows_pgsql.fellow_type_id AS fellowship_status_id', 'fellows_pgsql.fellowship_year', 'fellows_pgsql.fellowship_session', 'fellows_pgsql.fellow_id',
-                    'fellows_pgsql.fellow_name AS name', 'subjects.id AS subject_id', 'fellows_pgsql.office_address AS office_add', 'fellows_pgsql.office_address AS home_add',
+                    'fellows_pgsql.fellow_name AS name', 'subjects.id AS subject_id', 'fellows_pgsql.office_address AS office_add', 'fellows_pgsql.home_address AS home_add',
                     'fellows_pgsql.phone_office AS office_tel', 'fellows_pgsql.phone_office AS home_tel', 'fellows_pgsql.mobile AS mobile', 'fellows_pgsql.email AS e_mail',
                     'fellows_pgsql.sub', 'fellows_pgsql.desg', 'fellows_pgsql.inst', 'fellows_pgsql.remarks', 'fellows_pgsql.lifetime AS lifetime_member', 'fellows_pgsql.retired AS retired',
                     'fellows_pgsql.deceased AS deceased', 'fellows_pgsql.fellowship_date')
@@ -282,6 +282,8 @@ class FellowController extends Controller
         //dd($request->all());
 
         try {
+
+            DB::table('fellows_pgsql')->delete(); // Clear the fellows table before import
             Excel::import(new FellowsImport(), $request->file('fellowExcelFile')->store('temp'));
 
             return redirect()->back()->with('success', 'Data uploaded successfully.');
@@ -315,13 +317,14 @@ class FellowController extends Controller
 
         // Modified fellows
         $modifiedFellows = DB::table('fellows_pgsql')
-            ->select('fellows_pgsql.fellow_type_id AS fellowship_status_id', 'fellows_pgsql.fellowship_year', 'fellows_pgsql.fellowship_session', 'fellows_pgsql.fellow_id',
-                'fellows_pgsql.fellow_name AS name', 'subjects.id AS subject_id', 'fellows_pgsql.office_address AS office_add', 'fellows_pgsql.office_address AS home_add',
+            ->select('fellows_pgsql.fellow_type_id AS fellowship_status_id', 'fellowship_statuses.fellow_status_mame', 'fellows_pgsql.fellowship_year', 'fellows_pgsql.fellowship_session', 'fellows_pgsql.fellow_id',
+                'fellows_pgsql.fellow_name AS name', 'subjects.id AS subject_id', 'subjects.subject_name', 'fellows_pgsql.office_address AS office_add', 'fellows_pgsql.home_address AS home_add',
                 'fellows_pgsql.phone_office AS office_tel', 'fellows_pgsql.phone_office AS home_tel', 'fellows_pgsql.mobile AS mobile', 'fellows_pgsql.email AS e_mail',
                 'fellows_pgsql.sub', 'fellows_pgsql.desg', 'fellows_pgsql.inst', 'fellows_pgsql.remarks', 'fellows_pgsql.lifetime AS lifetime_member', 'fellows_pgsql.retired AS retired',
                 'fellows_pgsql.deceased AS deceased', 'fellows_pgsql.fellowship_date', 'fellows_pgsql.updated_at')
             ->join('fellows', 'fellows_pgsql.fellow_id', '=', 'fellows.fellow_id')
             ->join('subjects', 'fellows.subject_id', '=', 'subjects.id')
+            ->join('fellowship_statuses', 'fellows_pgsql.fellow_type_id', '=', 'fellowship_statuses.id')
             ->whereDate('fellows_pgsql.updated_at', '>', $lastUpdated)
             ->get();
 
@@ -344,7 +347,7 @@ class FellowController extends Controller
         // Modified fellows
         $modifiedFellows = DB::table('fellows_pgsql')
             ->select('fellows_pgsql.fellow_type_id AS fellowship_status_id', 'fellows_pgsql.fellowship_year', 'fellows_pgsql.fellowship_session', 'fellows_pgsql.fellow_id',
-                'fellows_pgsql.fellow_name AS name', 'subjects.id AS subject_id', 'fellows_pgsql.office_address AS office_add', 'fellows_pgsql.office_address AS home_add',
+                'fellows_pgsql.fellow_name AS name', 'subjects.id AS subject_id', 'fellows_pgsql.office_address AS office_add', 'fellows_pgsql.home_address AS home_add',
                 'fellows_pgsql.phone_office AS office_tel', 'fellows_pgsql.phone_office AS home_tel', 'fellows_pgsql.mobile AS mobile', 'fellows_pgsql.email AS e_mail',
                 'fellows_pgsql.sub', 'fellows_pgsql.desg', 'fellows_pgsql.inst', 'fellows_pgsql.remarks', 'fellows_pgsql.lifetime AS lifetime_member', 'fellows_pgsql.retired AS retired',
                 'fellows_pgsql.deceased AS deceased', 'fellows_pgsql.fellowship_date', 'fellows_pgsql.updated_at')

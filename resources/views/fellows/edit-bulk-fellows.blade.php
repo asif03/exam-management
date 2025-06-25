@@ -47,17 +47,25 @@
                                             <table id="fellowInfoTable" class="table border table-striped table-bordered">
                                                 <thead>
                                                     <tr>
-                                                        <th>Sl.</th>
+                                                        <th>Fellowship Type</th>
                                                         <th width="5%">Fellow ID</th>
                                                         <th>Name</th>
+                                                        <th>Subject</th>
+                                                        <th>Mobile</th>
+                                                        <th>Email</th>
+                                                        <th>Deceased?</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     @foreach ($fellows as $fellow)
                                                         <tr>
-                                                            <td>{{ $loop->index + 1 }}</td>
+                                                            <td>{{ $fellow->fellow_status_mame }}</td>
                                                             <td>{{ $fellow->fellow_id }}</td>
                                                             <td>{{ $fellow->name }}</td>
+                                                            <td>{{ $fellow->subject_name }}</td>
+                                                            <td>{{ $fellow->mobile }}</td>
+                                                            <td>{{ $fellow->e_mail }}</td>
+                                                            <td>{{ $fellow->deceased }}</td>
                                                         </tr>
                                                     @endforeach
                                                 </tbody>

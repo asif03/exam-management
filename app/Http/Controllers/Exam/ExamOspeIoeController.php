@@ -706,7 +706,7 @@ class ExamOspeIoeController extends Controller
 
         $smsBody = 'Dear Sir, You have been appointed as ' . $invigilator[0]->position_name . ' for the '
         . $scheduleInfo[0]->subject_name . ', ' . $scheduleInfo[0]->exam_type . '. You are requested to come to '
-        . $scheduleInfo[0]->block_name . ', ' . $scheduleInfo[0]->hall_name . ', BCPS on ' . $scheduleInfo[0]->exam_date . ' at '
+        . $scheduleInfo[0]->block_name . ', ' . $scheduleInfo[0]->hall_name . ', BCPS on ' . date('d-m-Y', strtotime($scheduleInfo[0]->exam_date)) . ' at '
         . date('h:i a', strtotime($scheduleInfo[0]->exam_start_time)) . ' Please consider this SMS as an alternative to the official letter.'
             . ' Contact us, if any query: 01713068214/01755617229.'
             . 'Regards, Controller of Examination, BCPS.';
@@ -800,7 +800,7 @@ class ExamOspeIoeController extends Controller
             $recipients[] = $invigilator->mobile;
             $messages[]   = 'Dear Sir, You have been appointed as ' . $invigilator->position_name . ' for the '
             . $scheduleInfo[0]->subject_name . ', ' . $scheduleInfo[0]->exam_type . '. You are requested to come to '
-            . $scheduleInfo[0]->block_name . ', ' . $scheduleInfo[0]->hall_name . ', BCPS on ' . $scheduleInfo[0]->exam_date . ' at '
+            . $scheduleInfo[0]->block_name . ', ' . $scheduleInfo[0]->hall_name . ', BCPS on ' . date('d-m-Y', strtotime($scheduleInfo[0]->exam_date)) . ' at '
             . date('h:i a', strtotime($scheduleInfo[0]->exam_start_time)) . ' Please consider this SMS as an alternative to the official letter.'
                 . ' Contact us, if any query: 01713068214/01755617229.'
                 . 'Regards, Controller of Examination, BCPS.';
