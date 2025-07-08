@@ -8,10 +8,10 @@ class Sms
 
     public function __construct()
     {
-        $this->user = config('sms.user');
+        $this->user     = config('sms.user');
         $this->password = config('sms.password');
-        $this->sid = config('sms.sid');
-        $this->url = config('sms.url');
+        $this->sid      = config('sms.sid');
+        $this->url      = config('sms.url');
         $this->apiToken = config('sms.apiToken');
     }
 
@@ -24,7 +24,7 @@ class Sms
      */
     function send($phone, $message)
     {
-        $url = $this->url;
+        $url  = $this->url;
         $data = [
             'user'      => $this->user,
             'pass'      => $this->password,
@@ -43,8 +43,8 @@ class Sms
             ],
         ];
 
-        $context = stream_context_create($options);
-        $result = file_get_contents($url, false, $context);
+        $context       = stream_context_create($options);
+        $result        = file_get_contents($url, false, $context);
         $parsed_result = simplexml_load_string($result);
 
         echo '<pre>';
@@ -101,17 +101,17 @@ class Sms
 
     function sentMultiple($recipients, $messages)
     {
-        $url = $this->url;
+        $url       = $this->url . '/bulk';
         $smsString = 'user=' . $this->user . '&pass=' . $this->password;
-        $smsSl = 0;
+        $smsSl     = 0;
 
         foreach ($recipients as $recipient) {
             if ($smsSl != count($recipients) - 1) {
                 $smsString .= '&sms[' . $smsSl . '][0]=' . $recipient . '&sms[' . $smsSl . '][1]=' . urlencode($messages[$smsSl])
-                    . '&sms[' . $smsSl . '][2]=' . random_int(1, 99999999);
+                . '&sms[' . $smsSl . '][2]=' . random_int(1, 99999999);
             } else {
                 $smsString .= '&sms[' . $smsSl . '][0]=' . $recipient . '&sms[' . $smsSl . '][1]=' . urlencode($messages[$smsSl])
-                    . '&sms[' . $smsSl . '][2]=' . random_int(1, 99999999) . '&';
+                . '&sms[' . $smsSl . '][2]=' . random_int(1, 99999999) . '&';
             }
 
             $smsSl++;

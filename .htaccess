@@ -3,6 +3,12 @@
     <ifmodule mod_negotiation.c>
         Options -MultiViews
     </ifmodule>
+
+    <ifmodule mod_php.c>
+        php_value max_execution_time 300
+        php_value max_input_time 300
+        php_value memory_limit 512M
+    </ifmodule>
      
     RewriteEngine On
      
@@ -16,7 +22,5 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ server.php
-
-    php_value memory_limit 256M
  
 </ifmodule>

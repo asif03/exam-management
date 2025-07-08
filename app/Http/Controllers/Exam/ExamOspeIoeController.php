@@ -793,52 +793,162 @@ class ExamOspeIoeController extends Controller
             )
             ->get();
 
-        $recipients = array();
-        $messages   = array();
+        $recipients    = array();
+        $recipientLoop = 0;
 
         foreach ($invigilators as $invigilator) {
-            $recipients[] = $invigilator->mobile;
-            $messages[]   = 'Dear Sir, You have been appointed as ' . $invigilator->position_name . ' for the '
+            $messages = 'Dear Sir, You have been appointed as ' . $invigilator->position_name . ' for the '
             . $scheduleInfo[0]->subject_name . ', ' . $scheduleInfo[0]->exam_type . '. You are requested to come to '
             . $scheduleInfo[0]->block_name . ', ' . $scheduleInfo[0]->hall_name . ', BCPS on ' . date('d-m-Y', strtotime($scheduleInfo[0]->exam_date)) . ' at '
             . date('h:i a', strtotime($scheduleInfo[0]->exam_start_time)) . ' Please consider this SMS as an alternative to the official letter.'
                 . ' Contact us, if any query: 01713068214/01755617229.'
                 . 'Regards, Controller of Examination, BCPS.';
+
+            $recipients[$recipientLoop]["text"]    = $messages;
+            $recipients[$recipientLoop]["msisdn"]  = $invigilator->mobile;
+            $recipients[$recipientLoop]["csms_id"] = $invigilator->fellow_id;
+            $recipientLoop++;
         }
 
-        $smsSent = new Sms();
-        $respose = $smsSent->sentMultiple($recipients, $messages);
+        $numberOfRecipients = count($recipients);
 
-        $xml = simplexml_load_string($respose);
+        // Chunking the SMS parameters to avoid hitting API limits
+        $chunkSize = 100; // number of items per chunk
 
-        foreach ($xml->SMSINFO as $smsSentInfo) {
+        if ($numberOfRecipients < $chunkSize) {
+            $smsParams = array(
+                'sms' => $recipients,
+            );
+            $response = $this->smsService->sendDynamicSms($smsParams);
 
-            if ($smsSentInfo->MSISDNSTATUS) {
-                foreach ($invigilators as $invigilator) {
-                    if ($invigilator->mobile == $smsSentInfo->MSISDN) {
-                        $scheduleDetails = ExamScheduleDetail::findOrFail($invigilator->id);
-                        $scheduleDetails->update(['sms_sent' => 'N']);
-                    }
+            if ($response['status_code'] != 200) {
+                return redirect()->route('edit-ospe-ioe-details-schedule', ['id' => $id])->with('error', $response['error_message']);
+            }
+
+            foreach ($response['smsinfo'] as $smsSentInfo) {
+
+                if ($smsSentInfo['sms_status'] == 'SUCCESS') {
+
+                    $scheduleDetails = ExamScheduleDetail::where('schedule_master_id', $id)
+                        ->where('fellow_id', $smsSentInfo['csms_id'])
+                        ->firstOrFail();
+                    $scheduleDetails->update([
+                        'sms_sent'       => 'Y',
+                        'sms_status_msg' => $smsSentInfo['status_message'],
+                    ]);
+
+                } else {
+                    $scheduleDetails = ExamScheduleDetail::where('schedule_master_id', $id)
+                        ->where('fellow_id', $smsSentInfo['csms_id'])
+                        ->firstOrFail();
+                    $scheduleDetails->update([
+                        'sms_sent'       => 'N',
+                        'sms_status_msg' => $smsSentInfo['status_message'],
+                    ]);
                 }
-            } else {
-                foreach ($invigilators as $invigilator) {
-                    if ($invigilator->mobile == $smsSentInfo->MSISDN) {
-                        $scheduleDetails = ExamScheduleDetail::findOrFail($invigilator->id);
-                        $scheduleDetails->update(['sms_sent' => 'Y']);
+            }
+
+            if ($response['status_code'] == 200) {
+                return redirect()->route('edit-ospe-ioe-details-schedule', ['id' => $id])->with('success', 'SMS Process run Successfully!');
+            }
+
+        } else {
+            for ($i = 0; $i < count($recipients); $i += $chunkSize) {
+                $chunkRecipients = array_slice($recipients, $i, $chunkSize);
+                $smsParams       = array(
+                    'sms' => $chunkRecipients,
+                );
+
+                $response = $this->smsService->sendDynamicSms($smsParams);
+
+                if ($response['status_code'] != 200) {
+                    return redirect()->route('edit-ospe-ioe-details-schedule', ['id' => $id])->with('error', $response['error_message']);
+                }
+
+                foreach ($response['smsinfo'] as $smsSentInfo) {
+
+                    if ($smsSentInfo['sms_status'] == 'SUCCESS') {
+
+                        $scheduleDetails = ExamScheduleDetail::where('schedule_master_id', $id)
+                            ->where('fellow_id', $smsSentInfo['csms_id'])
+                            ->firstOrFail();
+                        $scheduleDetails->update([
+                            'sms_sent'       => 'Y',
+                            'sms_status_msg' => $smsSentInfo['status_message'],
+                        ]);
+
+                    } else {
+                        $scheduleDetails = ExamScheduleDetail::where('schedule_master_id', $id)
+                            ->where('fellow_id', $smsSentInfo['csms_id'])
+                            ->firstOrFail();
+                        $scheduleDetails->update([
+                            'sms_sent'       => 'N',
+                            'sms_status_msg' => $smsSentInfo['status_message'],
+                        ]);
                     }
                 }
             }
+
+            if ($response['status_code'] == 200) {
+                return redirect()->route('edit-ospe-ioe-details-schedule', ['id' => $id])->with('success', 'SMS Process run Successfully!');
+            }
         }
 
-        //dd($xml);
+        //json_encode($smsParams);
 
-        if (
-            $xml->PARAMETER == 'OK' && $xml->LOGIN == 'SUCCESSFULL' && $xml->PUSHAPI == 'ACTIVE'
-            && $xml->STAKEHOLDERID == 'OK' && $xml->PERMITTED == 'OK'
-        ) {
-            return redirect()->route('edit-ospe-ioe-details-schedule', ['id' => $id])->with('success', 'SMS Process run Successfully!');
-        } else {
-            return redirect()->route('edit-ospe-ioe-details-schedule', ['id' => $id])->with('error', 'Failed to Process SMS.');
-        }
+        //dd(json_encode($smsParams));
+
+        //$isSent = $this->smsService->sendDynamicSms($smsParams);
+
+        // dd($isSent);
+
+        /* Old (Api) SMS Sending Code
+    $recipients = array();
+    $messages   = array();
+
+    foreach ($invigilators as $invigilator) {
+    $recipients[] = $invigilator->mobile;
+    $messages[]   = 'Dear Sir, You have been appointed as ' . $invigilator->position_name . ' for the '
+    . $scheduleInfo[0]->subject_name . ', ' . $scheduleInfo[0]->exam_type . '. You are requested to come to '
+    . $scheduleInfo[0]->block_name . ', ' . $scheduleInfo[0]->hall_name . ', BCPS on ' . date('d-m-Y', strtotime($scheduleInfo[0]->exam_date)) . ' at '
+    . date('h:i a', strtotime($scheduleInfo[0]->exam_start_time)) . ' Please consider this SMS as an alternative to the official letter.'
+    . ' Contact us, if any query: 01713068214/01755617229.'
+    . 'Regards, Controller of Examination, BCPS.';
+    }
+
+    $smsSent = new Sms();
+    $respose = $smsSent->sentMultiple($recipients, $messages);
+
+    $xml = simplexml_load_string($respose);
+
+    foreach ($xml->SMSINFO as $smsSentInfo) {
+
+    if ($smsSentInfo->MSISDNSTATUS) {
+    foreach ($invigilators as $invigilator) {
+    if ($invigilator->mobile == $smsSentInfo->MSISDN) {
+    $scheduleDetails = ExamScheduleDetail::findOrFail($invigilator->id);
+    $scheduleDetails->update(['sms_sent' => 'N']);
+    }
+    }
+    } else {
+    foreach ($invigilators as $invigilator) {
+    if ($invigilator->mobile == $smsSentInfo->MSISDN) {
+    $scheduleDetails = ExamScheduleDetail::findOrFail($invigilator->id);
+    $scheduleDetails->update(['sms_sent' => 'Y']);
+    }
+    }
+    }
+    }
+
+    if (
+    $xml->PARAMETER == 'OK' && $xml->LOGIN == 'SUCCESSFULL' && $xml->PUSHAPI == 'ACTIVE'
+    && $xml->STAKEHOLDERID == 'OK' && $xml->PERMITTED == 'OK'
+    ) {
+    return redirect()->route('edit-ospe-ioe-details-schedule', ['id' => $id])->with('success', 'SMS Process run Successfully!');
+    } else {
+    return redirect()->route('edit-ospe-ioe-details-schedule', ['id' => $id])->with('error', 'Failed to Process SMS.');
+    }
+    End Old (Api) SMS Sending Code */
+
     }
 }
