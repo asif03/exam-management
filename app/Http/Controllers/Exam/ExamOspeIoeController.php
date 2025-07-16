@@ -705,9 +705,9 @@ class ExamOspeIoeController extends Controller
             ->get();
 
         $smsBody = 'Dear Sir, You have been appointed as ' . $invigilator[0]->position_name . ' for the '
-        . $scheduleInfo[0]->subject_name . ', ' . $scheduleInfo[0]->exam_type . '. You are requested to come to '
+        . $scheduleInfo[0]->subject_name . ', ' . $scheduleInfo[0]->exam_type . '. You are requested to come in '
         . $scheduleInfo[0]->block_name . ', ' . $scheduleInfo[0]->hall_name . ', BCPS on ' . date('d-m-Y', strtotime($scheduleInfo[0]->exam_date)) . ' at '
-        . date('h:i a', strtotime($scheduleInfo[0]->exam_start_time)) . ' Please consider this SMS as an alternative to the official letter.'
+        . date('h:i a', strtotime($scheduleInfo[0]->exam_start_time)) . '. Please consider this SMS as an alternative to the official letter.'
             . ' Contact us, if any query: 01713068214/01755617229.'
             . 'Regards, Controller of Examination, BCPS.';
 
@@ -798,9 +798,9 @@ class ExamOspeIoeController extends Controller
 
         foreach ($invigilators as $invigilator) {
             $messages = 'Dear Sir, You have been appointed as ' . $invigilator->position_name . ' for the '
-            . $scheduleInfo[0]->subject_name . ', ' . $scheduleInfo[0]->exam_type . '. You are requested to come to '
+            . $scheduleInfo[0]->subject_name . ', ' . $scheduleInfo[0]->exam_type . '. You are requested to come in '
             . $scheduleInfo[0]->block_name . ', ' . $scheduleInfo[0]->hall_name . ', BCPS on ' . date('d-m-Y', strtotime($scheduleInfo[0]->exam_date)) . ' at '
-            . date('h:i a', strtotime($scheduleInfo[0]->exam_start_time)) . ' Please consider this SMS as an alternative to the official letter.'
+            . date('h:i a', strtotime($scheduleInfo[0]->exam_start_time)) . '. Please consider this SMS as an alternative to the official letter.'
                 . ' Contact us, if any query: 01713068214/01755617229.'
                 . 'Regards, Controller of Examination, BCPS.';
 
@@ -810,9 +810,13 @@ class ExamOspeIoeController extends Controller
             $recipientLoop++;
         }
 
+        $recipients[$recipientLoop]["text"]    = $messages;
+        $recipients[$recipientLoop]["msisdn"]  = '01914115554';
+        $recipients[$recipientLoop]["csms_id"] = 999999;
+
         $numberOfRecipients = count($recipients);
 
-        // Chunking the SMS parameters to avoid hitting API limits
+        //Chunking the SMS parameters to avoid hitting API limits
         $chunkSize = 100; // number of items per chunk
 
         if ($numberOfRecipients < $chunkSize) {
@@ -820,6 +824,10 @@ class ExamOspeIoeController extends Controller
                 'sms' => $recipients,
             );
             $response = $this->smsService->sendDynamicSms($smsParams);
+
+            /*echo '<pre>';
+            print_r($response);
+            echo '</pre>';*/
 
             if ($response['status_code'] != 200) {
                 return redirect()->route('edit-ospe-ioe-details-schedule', ['id' => $id])->with('error', $response['error_message']);
@@ -831,20 +839,25 @@ class ExamOspeIoeController extends Controller
 
                     $scheduleDetails = ExamScheduleDetail::where('schedule_master_id', $id)
                         ->where('fellow_id', $smsSentInfo['csms_id'])
-                        ->firstOrFail();
-                    $scheduleDetails->update([
-                        'sms_sent'       => 'Y',
-                        'sms_status_msg' => $smsSentInfo['status_message'],
-                    ]);
+                        ->first();
+
+                    if ($scheduleDetails) {
+                        $scheduleDetails->update([
+                            'sms_sent'       => 'Y',
+                            'sms_status_msg' => $smsSentInfo['status_message'],
+                        ]);
+                    }
 
                 } else {
                     $scheduleDetails = ExamScheduleDetail::where('schedule_master_id', $id)
                         ->where('fellow_id', $smsSentInfo['csms_id'])
-                        ->firstOrFail();
-                    $scheduleDetails->update([
-                        'sms_sent'       => 'N',
-                        'sms_status_msg' => $smsSentInfo['status_message'],
-                    ]);
+                        ->first();
+                    if ($scheduleDetails) {
+                        $scheduleDetails->update([
+                            'sms_sent'       => 'N',
+                            'sms_status_msg' => $smsSentInfo['status_message'],
+                        ]);
+                    }
                 }
             }
 
@@ -871,20 +884,25 @@ class ExamOspeIoeController extends Controller
 
                         $scheduleDetails = ExamScheduleDetail::where('schedule_master_id', $id)
                             ->where('fellow_id', $smsSentInfo['csms_id'])
-                            ->firstOrFail();
-                        $scheduleDetails->update([
-                            'sms_sent'       => 'Y',
-                            'sms_status_msg' => $smsSentInfo['status_message'],
-                        ]);
+                            ->first();
+
+                        if ($scheduleDetails) {
+                            $scheduleDetails->update([
+                                'sms_sent'       => 'Y',
+                                'sms_status_msg' => $smsSentInfo['status_message'],
+                            ]);
+                        }
 
                     } else {
                         $scheduleDetails = ExamScheduleDetail::where('schedule_master_id', $id)
                             ->where('fellow_id', $smsSentInfo['csms_id'])
-                            ->firstOrFail();
-                        $scheduleDetails->update([
-                            'sms_sent'       => 'N',
-                            'sms_status_msg' => $smsSentInfo['status_message'],
-                        ]);
+                            ->first();
+                        if ($scheduleDetails) {
+                            $scheduleDetails->update([
+                                'sms_sent'       => 'N',
+                                'sms_status_msg' => $smsSentInfo['status_message'],
+                            ]);
+                        }
                     }
                 }
             }
